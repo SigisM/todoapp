@@ -5,7 +5,7 @@
     <title>{% block title %}To Do & Shop smart{% endblock %}</title>
 </head>
 
-<h1>To Do listas</h1>
+<h3>To Do listas</h3>
 <form method="POST" action="/">
     {% csrf_token %}
     {{form.title}}
@@ -15,6 +15,11 @@
 {% for todo in todos %}
     <div>
         <a href="{% url 'update_todo' todo.id %}">Update</a>
-        <p>{{todo}}</p>
+        <a href="{% url 'delete_todo' todo.id %}">Delete</a>
+        {% if todo.completed == True %}
+        <strike>{{todo}}</strike>
+        {% else %}
+        <span>{{todo}}</span>
+        {% endif %}
     </div>
 {% endfor  %}

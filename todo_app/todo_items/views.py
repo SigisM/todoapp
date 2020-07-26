@@ -35,3 +35,14 @@ def updateTodo(request, pk):
     context = {'form':form}
 
     return render(request, 'update_todo.html', context)
+
+def deleteTodo(request, pk):
+    item = Todo.objects.get(id=pk)
+
+    if request.method == 'POST':
+        item.delete()
+        return redirect('/')
+
+
+    context = {'item':item}
+    return render(request, 'delete_todo.html', context)
