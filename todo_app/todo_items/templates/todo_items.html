@@ -1,25 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <meta charset="UTF-8">
     <title>{% block title %}To Do & Shop smart{% endblock %}</title>
+    <script src="https://kit.fontawesome.com/acabd4fa32.js" crossorigin="anonymous"></script>
+    <style>
+        .todo_list{
+            width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 3px;
+        }
+
+
+    </style>
 </head>
+<div class="todo_list">
+    <h3>To Do listas</h3>
+    <form method="POST" action="/">
+        {% csrf_token %}
+        {{form.title}}
+        <input class="btn btn-info" type="submit" name="Create Task">
+    </form>
 
-<h3>To Do listas</h3>
-<form method="POST" action="/">
-    {% csrf_token %}
-    {{form.title}}
-    <input type="submit" name="Create Task">
-</form>
-
-{% for todo in todos %}
-    <div>
-        <a href="{% url 'update_todo' todo.id %}">Update</a>
-        <a href="{% url 'delete_todo' todo.id %}">Delete</a>
-        {% if todo.completed == True %}
-        <strike>{{todo}}</strike>
-        {% else %}
-        <span>{{todo}}</span>
-        {% endif %}
-    </div>
-{% endfor  %}
+    {% for todo in todos %}
+        <div>
+            <a href="{% url 'update_todo' todo.id %}"><i class="far fa-edit" title="Edit item"></i></a>
+            <a href="{% url 'delete_todo' todo.id %}"><i class="far fa-trash-alt" title="Delete item"></i></a>
+            {% if todo.completed == True %}
+            <strike>{{todo}}</strike>
+            {% else %}
+            <span>{{todo}}</span>
+            {% endif %}
+        </div>
+    {% endfor  %}
+</div>

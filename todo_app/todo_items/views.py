@@ -21,6 +21,7 @@ def index(request):
     
     return render(request, 'todo_items.html', context)
 
+
 def updateTodo(request, pk):
     todo = Todo.objects.get(id=pk)
 
@@ -35,6 +36,7 @@ def updateTodo(request, pk):
     context = {'form':form}
 
     return render(request, 'update_todo.html', context)
+
 
 def deleteTodo(request, pk):
     item = Todo.objects.get(id=pk)
