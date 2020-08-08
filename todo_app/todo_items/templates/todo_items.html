@@ -7,33 +7,137 @@
     <title>{% block title %}To Do & Shop smart{% endblock %}</title>
     <script src="https://kit.fontawesome.com/acabd4fa32.js" crossorigin="anonymous"></script>
     <style>
+
         .todo_list{
-            width: 800px;
+            width: 600px;
             margin: 20px auto;
             padding: 20px;
             border-radius: 3px;
         }
 
+        .todo_rows {
+            background-color: lightsteelblue;
+            margin: 10px auto;
+            height: 30px;
+            width: 600px;
+        }
+        
+        .time {
+            text-decoration: none;
+            margin-right: 10px;
+            vertical-align: middle;
+            float: right;
+        }
+        .far {
+            color: black;
+            float: right;
+            padding-right: 10px;
+            vertical-align: middle;
+            line-height: 30px;
+        }
+
+        .checked {
+            color: red;
+            text-decoration: line-through;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        .unchecked {
+            color: blue;
+            text-decoration: none;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
 
     </style>
 </head>
-<div class="todo_list">
-    <h3>To Do listas</h3>
-    <form method="POST" action="/">
-        {% csrf_token %}
-        {{form.title}}
-        <input class="btn btn-info" type="submit" name="Create Task">
-    </form>
+<body>
 
-    {% for todo in todos %}
-        <div>
-            <a href="{% url 'update_todo' todo.id %}"><i class="far fa-edit" title="Edit item"></i></a>
-            <a href="{% url 'delete_todo' todo.id %}"><i class="far fa-trash-alt" title="Delete item"></i></a>
-            {% if todo.completed == True %}
-            <strike>{{todo}}</strike>
-            {% else %}
-            <span>{{todo}}</span>
-            {% endif %}
-        </div>
-    {% endfor  %}
-</div>
+
+    <div class="todo_list">
+        <h4>Add a task</h4>
+        <form method="POST" action="/">
+            {% csrf_token %}
+            {{form.title}}
+            {{form.created}}
+            <input class="btn btn-info" type="submit" name="Create Task">
+        </form>
+    </div>
+
+        <!-- {% now "Y-m-d" as todays_date %} -->
+
+
+        <h3 style="margin-left: 450px;">TODAY'S TASKS</h3>
+        {% for todo in todos_today %}
+                <div class="todo_rows">
+                    <input type="checkbox" name="checkbox_check"{% if todo.completed %} checked {% endif %} style="margin-left: 10px; vertical-align: middle">
+                    {% if todo.completed == True %}
+                        <span class="checked">{{todo}}</span>
+                    {% else %}
+                        <span class="unchecked">{{todo}}</span>
+                    {% endif %}
+                        <span class="time">{{todo.created|date:"Y m d"}}</span>
+                        <a href="{% url 'update_todo' todo.id %}"><i class="far fa-edit" title="Edit item";></i></a>
+                        <a href="{% url 'delete_todo' todo.id %}"><i class="far fa-trash-alt" title="Delete item"></i></a>
+                </div>
+                {% empty %}
+                <div class="todo_rows">
+                    <span>There's no items in this list</span>
+                </div>
+        {% endfor  %}
+
+
+        <h3 style="margin-left: 450px;">FUTURE TASKS</h3>
+        {% for todo in todos_future %}
+            <div class="todo_rows">
+                <input type="checkbox" name="checkbox_check"{% if todo.completed %} checked {% endif %} style="margin-left: 10px; vertical-align: middle">
+                {% if todo.completed == True %}
+                    <span class="checked">{{todo}}</span>
+                {% else %}
+                    <span class="unchecked">{{todo}}</span>
+                {% endif %}
+                    <span class="time">{{todo.created|date:"Y m d"}}</span>
+                    <a href="{% url 'update_todo' todo.id %}"><i class="far fa-edit" title="Edit item";></i></a>
+                    <a href="{% url 'delete_todo' todo.id %}"><i class="far fa-trash-alt" title="Delete item"></i></a>
+            </div>
+                {% empty %}
+                <div class="todo_rows">
+                    <span>There's no items in this list</span>
+                </div>
+        {% endfor  %}
+
+
+        <h3 style="margin-left: 450px;">EARLIER UNCOMPLETED TASK'S</h3>
+        {% for todo in todos_uncompleted_before %}
+            <div class="todo_rows">
+                <input type="checkbox" name="checkbox_check"{% if todo.completed %} checked {% endif %} style="margin-left: 10px; vertical-align: middle">
+                <span class="unchecked">{{todo}}</span>
+                <span class="time">{{todo.created|date:"Y m d"}}</span>
+                <a href="{% url 'update_todo' todo.id %}"><i class="far fa-edit" title="Edit item";></i></a>
+                <a href="{% url 'delete_todo' todo.id %}"><i class="far fa-trash-alt" title="Delete item"></i></a>
+            </div>
+            {% empty %}
+            <div class="todo_rows">
+                <span>There's no items in this list</span>
+            </div>
+        {% endfor  %}
+
+
+        <h3 style="margin-left: 450px;">EARLIER COMPLETED TASK'S TO BE DELETED</h3>    
+        {% for todo in todos_completed_before %}
+            <div class="todo_rows">
+                <input type="checkbox" name="checkbox_check"{% if todo.completed %} checked {% endif %} style="margin-left: 10px; vertical-align: middle">
+                <span class="checked">{{todo}}</span>
+                <span class="time">{{todo.created|date:"Y m d"}}</span>
+                <a href="{% url 'update_todo' todo.id %}"><i class="far fa-edit" title="Edit item";></i></a>
+                <a href="{% url 'delete_todo' todo.id %}"><i class="far fa-trash-alt" title="Delete item"></i></a>
+            </div>
+            {% empty %}
+            <div class="todo_rows">
+                <span>There's no items in this list</span>
+            </div>
+        {% endfor  %}
+
+</body>
+</html>
