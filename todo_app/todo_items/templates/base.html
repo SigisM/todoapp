@@ -1,0 +1,105 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>{% block title %}To Do & Shop smart{% endblock %}</title>
+    <script src="https://kit.fontawesome.com/acabd4fa32.js" crossorigin="anonymous"></script>
+    <style>
+
+        .todo_list{
+            width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 3px;
+        }
+
+        .register_list{
+            width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border-spacing: 5px;
+        }
+
+        .todo_rows {
+            background-color: lightsteelblue;
+            margin: 10px auto;
+            height: 30px;
+            width: 600px;
+        }
+        
+        .time {
+            text-decoration: none;
+            margin-right: 10px;
+            vertical-align: middle;
+            float: right;
+        }
+        .far {
+            color: black;
+            float: right;
+            padding-right: 10px;
+            vertical-align: middle;
+            line-height: 30px;
+        }
+
+        .checked {
+            color: red;
+            text-decoration: line-through;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        .unchecked {
+            color: blue;
+            text-decoration: none;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="sidebar">
+        {% block sidebar %}
+        {% if user.is_authenticated %}
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/logout">Logout</a></li>
+            <li><a href="/register">Register</a></li>
+
+        </ul>
+        {% elif user.is_anonymous %}
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/register">Register</a></li>
+
+        </ul>
+        {% endif %}
+        {% endblock %}
+    </div>
+
+    {% if user.is_authenticated %}
+    <p class="register_list">Welcome, {{ user.username }}. Thanks for logging in.</p>
+    {% else %}
+    <p class="register_list">Welcome, new user. Please log in to see the content.</p>
+    {% endif %}
+
+    {% if user.is_anonymous %}
+    {% block login %}
+    {% endblock %}
+    {% endif %}
+    
+    {% if user.is_authenticated %}
+    {% block content %}
+    {% endblock %}
+    {% endif %}
+
+
+   
+</body>
