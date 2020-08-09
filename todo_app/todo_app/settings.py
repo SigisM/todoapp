@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'todo_items',
     'shopping_items',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -52,6 +53,11 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'todo_app.urls'
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = "/"
+
+CRISPY_TEMPLATE_PACK="bootstrap4"
 
 TEMPLATES = [
     {
