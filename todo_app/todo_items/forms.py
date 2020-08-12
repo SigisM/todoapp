@@ -15,6 +15,7 @@ class TodoForm(forms.ModelForm):
         fields = ['title', 'created', 'completed']
         widgets = {
             'created': DateInput(),
+            'title': forms.TextInput(attrs={'size': '40'}),
         }
 
 class LoginForm(forms.Form):
