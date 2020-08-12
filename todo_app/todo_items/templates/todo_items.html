@@ -41,17 +41,17 @@
         <label><h3 class="collapsed_future">FUTURE TASKS</h3></label>
         <span class="number_of_count">{{todos_future|length}}</span>
         {% for todo in todos_future %}
-            <div class="todo_rows_future">
-                <input type="checkbox" name="checkbox_check"{% if todo.completed %} checked {% endif %} style="margin-left: 10px; vertical-align: middle">
-                {% if todo.completed == True %}
-                    <label class="checked">{{todo}}</label>
-                {% else %}
-                    <label class="unchecked">{{todo}}</label>
-                {% endif %}
-                    <span class="time">{{todo.created|date:"Y m d"}}</span>
-                    <a href="{% url 'update_todo' todo.id %}"><i class="far fa-edit" title="Edit item";></i></a>
-                    <a href="{% url 'delete_todo' todo.id %}"><i class="far fa-trash-alt" title="Delete item"></i></a>
-            </div>
+            <a href="{% url 'update_todo' todo.pk %}" target='myIframe'>
+                <div class="todo_rows_future">
+                    <input type="checkbox" name="checkbox_check"{% if todo.completed %} checked {% endif %} style="margin-left: 10px; vertical-align: middle">
+                    {% if todo.completed == True %}
+                        <label class="checked">{{todo}}</label>
+                    {% else %}
+                        <label class="unchecked">{{todo}}</label>
+                    {% endif %}
+                        <span class="time">{{todo.created|date:"Y m d"}}</span>
+                </div>
+            </a>
                 {% empty %}
                 <div class="todo_rows">
                     <span>There's no items in this list</span>
@@ -62,13 +62,13 @@
         <label><h3 class="collapsed_past">EARLIER UNCOMPLETED TASK'S</h3></label>
         <span class="number_of_count">{{todos_uncompleted_before|length}}</span>
         {% for todo in todos_uncompleted_before %}
-            <div class="todo_rows_past">
-                <input type="checkbox" name="checkbox_check"{% if todo.completed %} checked {% endif %} style="margin-left: 10px; vertical-align: middle">
-                <label class="unchecked">{{todo}}</label>
-                <span class="time">{{todo.created|date:"Y m d"}}</span>
-                <a href="{% url 'update_todo' todo.id %}"><i class="far fa-edit" title="Edit item";></i></a>
-                <a href="{% url 'delete_todo' todo.id %}"><i class="far fa-trash-alt" title="Delete item"></i></a>
-            </div>
+            <a href="{% url 'update_todo' todo.pk %}" target='myIframe'>
+                <div class="todo_rows_past">
+                    <input type="checkbox" name="checkbox_check"{% if todo.completed %} checked {% endif %} style="margin-left: 10px; vertical-align: middle">
+                    <label class="unchecked">{{todo}}</label>
+                    <span class="time">{{todo.created|date:"Y m d"}}</span>
+                </div>
+            </a>
             {% empty %}
             <div class="todo_rows">
                 <span>There's no items in this list</span>
@@ -79,13 +79,13 @@
         <label><h3 class="collapsed_past_compl">EARLIER COMPLETED TASK'S TO BE DELETED</h3></label>
         <span class="number_of_count">{{todos_completed_before|length}}</span>
         {% for todo in todos_completed_before %}
-            <div class="todo_rows_past_compl">
-                <input type="checkbox" name="checkbox_check"{% if todo.completed %} checked {% endif %} style="margin-left: 10px; vertical-align: middle">
-                <label class="checked">{{todo}}</label>
-                <span class="time">{{todo.created|date:"Y m d"}}</span>
-                <a href="{% url 'update_todo' todo.id %}"><i class="far fa-edit" title="Edit item";></i></a>
-                <a href="{% url 'delete_todo' todo.id %}"><i class="far fa-trash-alt" title="Delete item"></i></a>
-            </div>
+            <a href="{% url 'update_todo' todo.pk %}" target='myIframe'>
+                <div class="todo_rows_past_compl">
+                    <input type="checkbox" name="checkbox_check"{% if todo.completed %} checked {% endif %} style="margin-left: 10px; vertical-align: middle">
+                    <label class="checked">{{todo}}</label>
+                    <span class="time">{{todo.created|date:"Y m d"}}</span>
+                </div>
+            </a>
             {% empty %}
             <div class="todo_rows">
                 <span>There's no items in this list</span>
