@@ -1,0 +1,21 @@
+{% load static %}
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+<link type="text/css" href="{% static 'css/style.css' %}" rel="stylesheet" >
+
+
+    <h4 style="text-align: center; font-weight: bold;">Task details</h4>
+
+    <form method="POST" target='_parent' action="">
+        {% csrf_token %}
+
+        {{form}} 
+        <input type="submit" value="Save item" target="" name="Update ToDo Item">
+
+            <a href="{% url 'delete_todo' todo.id %}" target="">
+                <input style="float: right;" type="button" value="Delete item" />
+            </a>
+        </a>
+        
+    </form>

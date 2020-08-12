@@ -3,16 +3,16 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
-from django.contrib.auth import get_user_model
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 import datetime
+from django.views.decorators.clickjacking import xframe_options_exempt
 
 from .models import *
 from .forms import *
 
 
 now = datetime.datetime.now()
+
 
 def register(response):
     if response.method == "POST":
@@ -49,7 +49,6 @@ def login(request):
 
 @login_required
 def index(request):
-
     user = request.user
     todos = Todo.objects.filter(author=user)
     todos_today = Todo.objects.filter(created=now, author=user)
@@ -73,14 +72,14 @@ def index(request):
             'todos_future':todos_future,
             'todos_uncompleted_before':todos_uncompleted_before,
             'todos_today':todos_today,
-            'form':form
+            'form':form,
             }
         
     return render(request, 'todo_items.html', context)
 
-
+@xframe_options_exempt
 def updateTodo(request, pk):
-    todo = Todo.objects.get(id=pk)
+    todo = Todo.objects.get(pk=pk)
 
     form = TodoForm(instance=todo)
 
@@ -90,13 +89,13 @@ def updateTodo(request, pk):
             form.save()
             return redirect('/')
 
-    context = {'form':form}
+    context = {'form':form, 'todo':todo}
 
-    return render(request, 'update_todo.html', context)
+    return render(request, 'update_todo_expand.html', context)
 
 
 def deleteTodo(request, pk):
-    item = Todo.objects.get(id=pk)
+    item = Todo.objects.get(pk=pk)
 
     if request.method == 'POST':
         item.delete()
