@@ -9,6 +9,7 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 
 from .models import *
 from .forms import *
+from .tasks import send_email_task
 
 
 now = datetime.datetime.now()
@@ -63,6 +64,7 @@ def index(request):
         form.instance.author = request.user
         if form.is_valid():
             form.save()
+            send_email_task.delay()
         return redirect('/')
 
 
@@ -77,7 +79,7 @@ def index(request):
         
     return render(request, 'todo_items.html', context)
 
-@xframe_options_exempt
+# @xframe_options_exempt
 def updateTodo(request, pk):
     todo = Todo.objects.get(pk=pk)
 
