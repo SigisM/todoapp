@@ -59,7 +59,7 @@
         {% endfor  %}
 
 
-        <label><h3 class="collapsed_past">EARLIER UNCOMPLETED TASK'S</h3></label>
+        <label><h3 class="collapsed_past">EARLIER UNCOMPLETED TASKS</h3></label>
         <span class="number_of_count">{{todos_uncompleted_before|length}}</span>
         {% for todo in todos_uncompleted_before %}
             <a href="{% url 'update_todo' todo.pk %}" target='myIframe'>
@@ -76,7 +76,7 @@
         {% endfor  %}
 
 
-        <label><h3 class="collapsed_past_compl">EARLIER COMPLETED TASK'S TO BE DELETED</h3></label>
+        <label><h3 class="collapsed_past_compl">EARLIER COMPLETED TASKS TO BE DELETED</h3></label>
         <span class="number_of_count">{{todos_completed_before|length}}</span>
         {% for todo in todos_completed_before %}
             <a href="{% url 'update_todo' todo.pk %}" target='myIframe'>

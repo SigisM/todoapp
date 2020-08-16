@@ -24,6 +24,8 @@ urllib3 = "==1.25.8"
 Django = "==3.0.2"
 mysqlclient = "*"
 djangorestframework = "*"
+celery = "*"
+redis = "*"
 
 [requires]
 python_version = "3.8"
