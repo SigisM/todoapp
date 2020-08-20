@@ -3,10 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django_celery_beat.models import CrontabSchedule, PeriodicTask
+import datetime
 
 from .models import Todo
 from .forms import RegisterForm, LoginForm, TodoForm
 
+now = datetime.datetime.now()
 
 def register(response):
     if response.method == "POST":
