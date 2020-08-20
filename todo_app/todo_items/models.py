@@ -18,22 +18,3 @@ class Todo(models.Model):
 
     def __str__(self):
         return self.title
-
-# class Reminder(models.Model):
-#     daily_reminder = models.BooleanField(default=False)
-
-# class User(models.Model):
-#     username = models.CharField(max_length=20)
-#     name = models.CharField(max_length=50)
-#     password = models.CharField(max_length=20)
-
-#     def __str__(self):
-#         return self.name
-
-
-# class UserManager(models.Manager):
-#     def create_user(self, username):
-#         user = self.create(title=username)
-#         # do something with the book
-#         return user
-

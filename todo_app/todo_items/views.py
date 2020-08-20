@@ -1,20 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
-from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
-import datetime
-from django.views.decorators.clickjacking import xframe_options_exempt
 from django.core.exceptions import ValidationError
+from django_celery_beat.models import CrontabSchedule, PeriodicTask
 
-from .models import *
-from .forms import *
-from .tasks import send_email_task2
-from django_celery_beat.models import CrontabSchedule, PeriodicTask, PeriodicTasks
-
-
-now = datetime.datetime.now()
+from .models import Todo
+from .forms import RegisterForm, LoginForm, TodoForm
 
 
 def register(response):
@@ -27,7 +18,6 @@ def register(response):
         form = RegisterForm()
 
     return render(response, "registration/register.html", {"form":form})
-
 
 
 def login(request):
@@ -68,8 +58,6 @@ def index(request):
             form.save()
         return redirect('/')
 
-
-
     context = {'todos':todos,
             'todos_completed_before':todos_completed_before,
             'todos_future':todos_future,
@@ -80,7 +68,7 @@ def index(request):
         
     return render(request, 'todo_items.html', context)
 
-# @xframe_options_exempt
+
 def updateTodo(request, pk):
     user = request.user
     todo = Todo.objects.get(pk=pk)
