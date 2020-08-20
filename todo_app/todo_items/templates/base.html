@@ -1,0 +1,99 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>{% block title %}To Do & Shop smart{% endblock %}</title>
+    <script src="https://kit.fontawesome.com/acabd4fa32.js" crossorigin="anonymous"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+
+            $(".collapsed_today").click(function(event){$(".todo_rows_today").fadeToggle().delay(100);})
+            $(".collapsed_future").click(function(event){$(".todo_rows_future").fadeToggle().delay(100);})
+            $(".collapsed_past").click(function(event){$(".todo_rows_past").fadeToggle().delay(100);})
+            $(".collapsed_past_compl").click(function(event){$(".todo_rows_past_compl").fadeToggle().delay(100);})
+            
+            $(".todo_rows_today").click(function(event) {
+                if ($(".update").is(":hidden"))
+                    $(".update").fadeToggle().delay(100);
+
+              })
+
+            $(".todo_rows_future").click(function(event) {
+                if ($(".update").is(":hidden"))
+                    $(".update").fadeToggle().delay(100);
+
+              })
+            $(".todo_rows_past").click(function(event) {
+                if ($(".update").is(":hidden"))
+                    $(".update").fadeToggle().delay(100);
+
+              })
+            $(".todo_rows_past_compl").click(function(event) {
+                if ($(".update").is(":hidden"))
+                    $(".update").fadeToggle().delay(100);
+
+              })
+            
+            
+          })
+        
+        
+</script>
+    <link type="text/css" href="{% static 'css/style.css' %}" rel="stylesheet" >
+
+</head>
+<body>
+    {% if user.is_authenticated %}
+    <div class="welcome">Welcome, {{ user.username }}</div>
+    {% endif %}
+    <div class="sidebar">
+        {% block sidebar %}
+        {% if user.is_authenticated %}
+        <ul>
+            <li class="menu"><a href="/">Home</a></li>
+            <li class="menu"><a href="/login">Login</a></li>
+            <li class="menu"><a href="/register">Register</a></li>
+            <li class="menu"><a href="/logout">Logout</a></li>
+
+        </ul>
+        {% elif user.is_anonymous %}
+        <ul>
+            <li class="menu"><a href="/">Home</a></li>
+            <li class="menu"><a href="/login">Login</a></li>
+            <li class="menu"><a href="/register">Register</a></li>
+
+        </ul>
+        {% endif %}
+        {% endblock %}
+    </div>
+
+    
+
+    {% if user.is_anonymous %}
+    <div class="login">
+        <p class="register_list">Welcome, new user. Please log in to see the content.</p>
+        {% block login %}
+        {% endblock %}
+        {% block register %}
+        {% endblock %}
+        {% endif %}
+    </div>
+    
+    {% if user.is_authenticated %}
+    <div class="login">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <div class="update" style="display: none;">
+       <iframe class="myIframe" name="myIframe" height="100%" width="100%" src='about:blank'></iframe>
+    </div>
+    {% endif %}
+
+
+</body>

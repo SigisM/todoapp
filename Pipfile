@@ -4,6 +4,7 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+pylint = "*"
 
 [packages]
 asgiref = "==3.2.3"
@@ -23,6 +24,9 @@ urllib3 = "==1.25.8"
 Django = "==3.0.2"
 mysqlclient = "*"
 djangorestframework = "*"
+celery = "*"
+redis = "*"
+django-celery-beat = "*"
 
 [requires]
 python_version = "3.8"
