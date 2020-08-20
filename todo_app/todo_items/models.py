@@ -12,10 +12,15 @@ class Todo(models.Model):
     completed = models.BooleanField(default=False)
     created = models.DateField(default=datetime.date.today)
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    daily_reminder = models.BooleanField(blank=True, default=False)
+    reminder_time = models.TextField(blank=True)
 
 
     def __str__(self):
         return self.title
+
+# class Reminder(models.Model):
+#     daily_reminder = models.BooleanField(default=False)
 
 # class User(models.Model):
 #     username = models.CharField(max_length=20)
