@@ -1,11 +1,19 @@
 from django.shortcuts import render, redirect
+<<<<<<< Updated upstream
 from django.http import HttpResponse
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView
+=======
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django_celery_beat.models import CrontabSchedule, PeriodicTask
+>>>>>>> Stashed changes
 import datetime
 
 from .models import *
 from .forms import *
 
+now = datetime.datetime.now()
 
 now = datetime.datetime.now()
 
