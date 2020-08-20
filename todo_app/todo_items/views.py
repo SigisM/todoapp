@@ -11,7 +11,7 @@ from django.core.exceptions import ValidationError
 from .models import *
 from .forms import *
 from .tasks import send_email_task2
-from django_celery_beat.models import CrontabSchedule, PeriodicTask
+from django_celery_beat.models import CrontabSchedule, PeriodicTask, PeriodicTasks
 
 
 now = datetime.datetime.now()
@@ -95,25 +95,38 @@ def updateTodo(request, pk):
             reminder_hour = reminder_time[0:2]
             reminder_minute = reminder_time[3:5]
             if form.instance.daily_reminder == True:
-                schedule, _ = CrontabSchedule.objects.get_or_create(
-                    minute=int(reminder_minute),
-                    hour=int(reminder_hour),
-                    day_of_week='*',
-                    day_of_month='*',
-                    month_of_year='*',
-                    )
-                try: 
-                    PeriodicTask.objects.create(
-                        crontab=schedule,
-                        name='Reminder'+'_'+str(user)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk),
-                        task='todo_items.tasks.send_email_task3',
+                try:
+                    periodic_task = PeriodicTask.objects.get(name='Reminder'+'_'+str(user)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk))
+                    periodic_task.enabled = True
+                    periodic_task.save()
+                except:
+                    schedule, _ = CrontabSchedule.objects.get_or_create(
+                        minute=int(reminder_minute),
+                        hour=int(reminder_hour),
+                        day_of_week='*',
+                        day_of_month='*',
+                        month_of_year='*',
+                        timezone='Europe/Vilnius',
                         )
-                except ValidationError:
-                    PeriodicTask.objects.get(
-                        crontab=schedule,
-                        name='Reminder'+'_'+str(user)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk),
-                        task='todo_items.tasks.send_email_task3',
-                        )
+                    try: 
+                        PeriodicTask.objects.create(
+                            crontab=schedule,
+                            name='Reminder'+'_'+str(user)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk),
+                            task='todo_items.tasks.send_email_task3',
+                            )
+                    except ValidationError:
+                        PeriodicTask.objects.get(
+                            crontab=schedule,
+                            name='Reminder'+'_'+str(user)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk),
+                            task='todo_items.tasks.send_email_task3',
+                            )
+            if form.instance.daily_reminder == False:
+                try:
+                    periodic_task = PeriodicTask.objects.get(name='Reminder'+'_'+str(user)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk))
+                    periodic_task.enabled = False
+                    periodic_task.save()
+                except:
+                    pass
             return redirect('/')
 
     context = {'form':form, 'todo':todo}
