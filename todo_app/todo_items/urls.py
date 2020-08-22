@@ -6,6 +6,8 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     path('', views.index, name='list_page'),
+    path('today/', views.today, name='today_page'),
+    path('seven_days/', views.seven_days, name='seven_days_page'),
     path('register/', views.register, name='register_page'),
     path('update_todo_expand.html/<str:pk>/', views.updateTodo, name='update_todo'),
     path('delete_todo/<str:pk>/', views.deleteTodo, name='delete_todo'),
