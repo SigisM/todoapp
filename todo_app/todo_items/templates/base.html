@@ -14,6 +14,12 @@
         $(document).ready(function() {
 
             $(".collapsed_today").click(function(event){$(".todo_rows_today").fadeToggle().delay(100);})
+            $(".collapsed_tomorrow1").click(function(event){$(".todo_rows_tomorrow1").fadeToggle().delay(100);})
+            $(".collapsed_tomorrow2").click(function(event){$(".todo_rows_tomorrow2").fadeToggle().delay(100);})
+            $(".collapsed_tomorrow3").click(function(event){$(".todo_rows_tomorrow3").fadeToggle().delay(100);})
+            $(".collapsed_tomorrow4").click(function(event){$(".todo_rows_tomorrow4").fadeToggle().delay(100);})
+            $(".collapsed_tomorrow5").click(function(event){$(".todo_rows_tomorrow5").fadeToggle().delay(100);})
+            $(".collapsed_tomorrow6").click(function(event){$(".todo_rows_tomorrow6").fadeToggle().delay(100);})
             $(".collapsed_future").click(function(event){$(".todo_rows_future").fadeToggle().delay(100);})
             $(".collapsed_past").click(function(event){$(".todo_rows_past").fadeToggle().delay(100);})
             $(".collapsed_past_compl").click(function(event){$(".todo_rows_past_compl").fadeToggle().delay(100);})
@@ -60,6 +66,11 @@
             <li class="menu"><a href="/login">Login</a></li>
             <li class="menu"><a href="/register">Register</a></li>
             <li class="menu"><a href="/logout">Logout</a></li>
+            <br><br><br>
+            <li class="menu"><a href="/today">Today</a></li>
+            <li class="menu"><a href="/seven_days">Next 7 days</a></li>
+            <li class="menu"><a href="/">All Tasks</a></li>
+
 
         </ul>
         {% elif user.is_anonymous %}

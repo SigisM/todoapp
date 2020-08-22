@@ -8,7 +8,16 @@ import datetime
 from .models import Todo
 from .forms import RegisterForm, LoginForm, TodoForm
 
-now = datetime.datetime.now()
+now = datetime.datetime.today()
+tomorrow_1 = datetime.date.today() + datetime.timedelta(days=1)
+tomorrow_2 = datetime.date.today() + datetime.timedelta(days=2)
+tomorrow_3 = datetime.date.today() + datetime.timedelta(days=3)
+tomorrow_4 = datetime.date.today() + datetime.timedelta(days=4)
+tomorrow_5 = datetime.date.today() + datetime.timedelta(days=5)
+tomorrow_6 = datetime.date.today() + datetime.timedelta(days=6)
+tomorrow_7 = datetime.date.today() + datetime.timedelta(days=7)
+
+
 
 def register(response):
     if response.method == "POST":
@@ -71,6 +80,71 @@ def index(request):
     return render(request, 'todo_items.html', context)
 
 
+@login_required
+def today(request):
+    user = request.user
+    todos = Todo.objects.filter(author=user)
+    todos_today = Todo.objects.filter(created=now, author=user)
+    form = TodoForm()
+
+    if request.method =='POST':
+        
+        form = TodoForm(request.POST)
+        form.instance.author = request.user
+        if form.is_valid():
+            form.save()
+        return redirect("")
+
+    context = {'todos':todos,
+            'todos_today':todos_today,
+            'form':form,
+            }
+        
+    return render(request, 'today_items.html', context)
+
+
+@login_required
+def seven_days(request):
+    user = request.user
+    todos = Todo.objects.filter(author=user)
+    todos_today = Todo.objects.filter(created=now, author=user)
+    todos_tomorrow_1 = Todo.objects.filter(created__gt=now, created__lt=tomorrow_2, author=user)
+    todos_tomorrow_2 = Todo.objects.filter(created__gt=tomorrow_1, created__lt=tomorrow_3, author=user)
+    todos_tomorrow_3 = Todo.objects.filter(created__gt=tomorrow_2, created__lt=tomorrow_4, author=user)
+    todos_tomorrow_4 = Todo.objects.filter(created__gt=tomorrow_3, created__lt=tomorrow_5, author=user)
+    todos_tomorrow_5 = Todo.objects.filter(created__gt=tomorrow_4, created__lt=tomorrow_6, author=user)
+    todos_tomorrow_6 = Todo.objects.filter(created__gt=tomorrow_5, created__lt=tomorrow_7, author=user)
+    form = TodoForm()
+
+    if request.method =='POST':
+        
+        form = TodoForm(request.POST)
+        form.instance.author = request.user
+        if form.is_valid():
+            form.save()
+        return redirect('/seven_days')
+
+    context = {'todos':todos,
+            'todos_today':todos_today,
+            'todos_tomorrow_1':todos_tomorrow_1,
+            'todos_tomorrow_2':todos_tomorrow_2,
+            'todos_tomorrow_3':todos_tomorrow_3,
+            'todos_tomorrow_4':todos_tomorrow_4,
+            'todos_tomorrow_5':todos_tomorrow_5,
+            'todos_tomorrow_6':todos_tomorrow_6,
+            'form':form,
+            'tomorrow1':tomorrow_1,
+            'tomorrow2':tomorrow_2,
+            'tomorrow3':tomorrow_3,
+            'tomorrow4':tomorrow_4,
+            'tomorrow5':tomorrow_5,
+            'tomorrow6':tomorrow_6,
+            'now':now,
+            }
+        
+    return render(request, '7days_items.html', context)
+
+
 def updateTodo(request, pk):
     user = request.user
     todo = Todo.objects.get(pk=pk)
@@ -117,7 +191,7 @@ def updateTodo(request, pk):
                     periodic_task.save()
                 except:
                     pass
-            return redirect('/')
+            return redirect("/")
 
     context = {'form':form, 'todo':todo}
 
