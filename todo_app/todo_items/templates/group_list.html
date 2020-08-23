@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+
+{% block group_list %}
+
+    <div class="todo_list">
+        <h4>Add a group</h4>
+        <form method="POST" action="">
+            {% csrf_token %}
+            <table>
+                {{form.group_name.label_tag}}{{form.group_name}}
+            </table>
+            <input class="btn btn-info" type="submit" name="Create Group">
+        </form>
+        {% if error_message %}
+            <p>{{ error_message }}</p>
+        {% endif %}
+    </div>
+{% endblock%}

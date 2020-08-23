@@ -14,13 +14,13 @@
 
     <h4 style="text-align: center; font-weight: bold;">Task details</h4>
 
-    <form method="POST" target='_parent' action="">
+    <form method="POST" target='_top' action="">
         {% csrf_token %}
 
         {{form.title.label_tag}} {{form.title}}
         {{form.created.label_tag}} {{form.created}}
         {{form.completed.label_tag}} {{form.completed}}             
-    
+        {{form.task_group.label_tag}} {{form.task_group}}
     <div>
         <br>
         <label><span class="set_reminder" style="font-weight: bold; display: block; cursor: pointer;">SET A REMINDER</span></label>

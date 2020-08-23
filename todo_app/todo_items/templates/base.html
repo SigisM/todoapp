@@ -70,6 +70,7 @@
             <li class="menu"><a href="/today">Today</a></li>
             <li class="menu"><a href="/seven_days">Next 7 days</a></li>
             <li class="menu"><a href="/">All Tasks</a></li>
+            <li class="menu"><a href="/groups">Groups</a></li>
 
 
         </ul>
@@ -98,6 +99,8 @@
     
     {% if user.is_authenticated %}
     <div class="login">
+        {% block group_list %}
+        {% endblock %}
         {% block content %}
         {% endblock %}
     </div>
