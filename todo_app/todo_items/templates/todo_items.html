@@ -8,6 +8,7 @@
             {% csrf_token %}
             {{form.title}}
             {{form.created}}
+            {{form.task_group.label_tag}} {{form.task_group}}
             <input class="btn btn-info" type="submit" name="Create Task">
         </form>
     </div>

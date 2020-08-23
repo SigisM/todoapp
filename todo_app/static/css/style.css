@@ -4,6 +4,12 @@
 
 }
 
+.task_group {
+    height: 30px;
+    width: 200px;
+    margin-top: 5px;
+}
+
 body {
     font-family: myfont, serif;
 }

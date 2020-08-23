@@ -3,10 +3,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django_celery_beat.models import CrontabSchedule, PeriodicTask
+from django.http import HttpResponseRedirect, HttpResponse
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 import datetime
 
-from .models import Todo
-from .forms import RegisterForm, LoginForm, TodoForm
+from .models import Todo, Todo_Group
+from .forms import RegisterForm, LoginForm, TodoForm, GroupForm
 
 now = datetime.datetime.today()
 tomorrow_1 = datetime.date.today() + datetime.timedelta(days=1)
@@ -17,6 +20,14 @@ tomorrow_5 = datetime.date.today() + datetime.timedelta(days=5)
 tomorrow_6 = datetime.date.today() + datetime.timedelta(days=6)
 tomorrow_7 = datetime.date.today() + datetime.timedelta(days=7)
 
+
+@receiver(post_save, sender=User)
+def create_default_group(sender, instance, **kwargs):
+    group_name = "Uncategorised"
+    if Todo_Group.objects.filter(group_name=group_name, user=instance).exists():
+        return False
+    else:
+        Todo_Group.objects.create(group_name=group_name, user=instance)
 
 
 def register(response):
@@ -60,7 +71,8 @@ def index(request):
     todos_future = Todo.objects.filter(created__gt=now, author=user)
     todos_uncompleted_before = Todo.objects.filter(completed=False, created__lt=now, author=user)
     form = TodoForm()
-
+    form.fields['task_group'].queryset = Todo_Group.objects.filter(user=user)
+    
     if request.method =='POST':
         
         form = TodoForm(request.POST)
@@ -81,11 +93,38 @@ def index(request):
 
 
 @login_required
+def list_group(request):
+    groups = Todo_Group.objects.all()
+    form = GroupForm()
+
+    if request.method =='POST':
+        form = GroupForm(request.POST)
+        form.instance.user = request.user
+        if form.is_valid():
+            group_name = form.cleaned_data['group_name']
+            if Todo_Group.objects.filter(group_name=group_name).exists():
+                error_message = "Group name already exists!" 
+                return render(request, 'group_list.html', {'form': form, 'error_message': error_message})
+            else:
+                form.save()
+
+        return HttpResponseRedirect(request.path)
+
+    context = {'groups':groups,
+            'form':form,
+            }
+
+    return render(request, 'group_list.html', context)
+
+
+
+@login_required
 def today(request):
     user = request.user
     todos = Todo.objects.filter(author=user)
     todos_today = Todo.objects.filter(created=now, author=user)
     form = TodoForm()
+    form.fields['task_group'].queryset = Todo_Group.objects.filter(user=user)
 
     if request.method =='POST':
         
@@ -93,7 +132,7 @@ def today(request):
         form.instance.author = request.user
         if form.is_valid():
             form.save()
-        return redirect("")
+        return HttpResponseRedirect(request.path)
 
     context = {'todos':todos,
             'todos_today':todos_today,
@@ -115,6 +154,7 @@ def seven_days(request):
     todos_tomorrow_5 = Todo.objects.filter(created__gt=tomorrow_4, created__lt=tomorrow_6, author=user)
     todos_tomorrow_6 = Todo.objects.filter(created__gt=tomorrow_5, created__lt=tomorrow_7, author=user)
     form = TodoForm()
+    form.fields['task_group'].queryset = Todo_Group.objects.filter(user=user)
 
     if request.method =='POST':
         
@@ -122,7 +162,7 @@ def seven_days(request):
         form.instance.author = request.user
         if form.is_valid():
             form.save()
-        return redirect('/seven_days')
+        return HttpResponseRedirect(request.path_info)
 
     context = {'todos':todos,
             'todos_today':todos_today,
@@ -191,7 +231,9 @@ def updateTodo(request, pk):
                     periodic_task.save()
                 except:
                     pass
-            return redirect("/")
+            next_short = request.path
+            print(f"REQUEST IS {next_short}")
+            return HttpResponseRedirect("/")
 
     context = {'form':form, 'todo':todo}
 
