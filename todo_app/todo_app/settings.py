@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'todo_items',
     'shopping_items',
+    'crispy_forms',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -52,6 +54,31 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'todo_app.urls'
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = "/"
+
+CRISPY_TEMPLATE_PACK="bootstrap4"
+
+# CELERY STUFF
+BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/Vilnius'
+CELERY_ENABLE_UTC = False
+
+# EMAIL
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'my.todo.apl@gmail.com'
+EMAIL_HOST_PASSWORD = 'rexrhyazeeksfoip'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
 
 TEMPLATES = [
     {
@@ -111,7 +138,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Vilnius'
 
 USE_I18N = True
 
@@ -125,7 +152,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# STATICFILES_DIRS = (
-#      os.path.join(BASE_DIR, 'static'),
-# )
+STATICFILES_DIRS = (
+     os.path.join(BASE_DIR, 'static'),
+)
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static')

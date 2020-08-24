@@ -1,16 +1,26 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from django.views.generic import CreateView, ListView, UpdateView, DeleteView
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django_celery_beat.models import CrontabSchedule, PeriodicTask
+from django.http import HttpResponseRedirect, HttpResponse
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 import datetime
 
-from .models import *
-from .forms import *
+from .models import Todo, Todo_Group
+from .forms import RegisterForm, LoginForm, TodoForm, GroupForm
+
+now = datetime.datetime.today()
+tomorrow_1 = datetime.date.today() + datetime.timedelta(days=1)
+tomorrow_2 = datetime.date.today() + datetime.timedelta(days=2)
+tomorrow_3 = datetime.date.today() + datetime.timedelta(days=3)
+tomorrow_4 = datetime.date.today() + datetime.timedelta(days=4)
+tomorrow_5 = datetime.date.today() + datetime.timedelta(days=5)
+tomorrow_6 = datetime.date.today() + datetime.timedelta(days=6)
+tomorrow_7 = datetime.date.today() + datetime.timedelta(days=7)
 
 
-now = datetime.datetime.now()
-
-<<<<<<< Updated upstream
-=======
 @receiver(post_save, sender=User)
 def create_default_group(sender, instance, **kwargs):
     group_name = "Uncategorised"
@@ -52,37 +62,36 @@ def login(request):
     return render(request, 'registration/login.html')
 
 
-
 @login_required
->>>>>>> Stashed changes
 def index(request):
-    todos = Todo.objects.all()
-    todos_today = Todo.objects.filter(created=now)
-    todos_completed_before = Todo.objects.filter(completed=True, created__lt=now)
-    todos_future = Todo.objects.filter(created__gt=now)
-    todos_uncompleted_before = Todo.objects.filter(completed=False, created__lt=now)
+    user = request.user
+    todos = Todo.objects.filter(author=user)
+    todos_today = Todo.objects.filter(created=now, author=user)
+    todos_completed_before = Todo.objects.filter(completed=True, created__lt=now, author=user)
+    todos_future = Todo.objects.filter(created__gt=now, author=user)
+    todos_uncompleted_before = Todo.objects.filter(completed=False, created__lt=now, author=user)
     form = TodoForm()
-
+    form.fields['task_group'].queryset = Todo_Group.objects.filter(user=user)
+    
     if request.method =='POST':
+        
         form = TodoForm(request.POST)
+        form.instance.author = request.user
         if form.is_valid():
             form.save()
         return redirect('/')
-
 
     context = {'todos':todos,
             'todos_completed_before':todos_completed_before,
             'todos_future':todos_future,
             'todos_uncompleted_before':todos_uncompleted_before,
             'todos_today':todos_today,
-            'form':form
+            'form':form,
             }
-    
+        
     return render(request, 'todo_items.html', context)
 
 
-<<<<<<< Updated upstream
-=======
 @login_required
 def group_list(request):
     todos = Todo.objects.all()
@@ -117,6 +126,9 @@ def list_group(request):
                 success_message = "Group sucessfully created!"
 
             return render(request, 'group_list.html', {'form': form, 'success_message': success_message})
+
+        return HttpResponseRedirect(request.path)
+
 
     context = {'groups':groups,
             'form':form,
@@ -193,9 +205,9 @@ def seven_days(request):
     return render(request, '7days_items.html', context)
 
 
->>>>>>> Stashed changes
 def updateTodo(request, pk):
-    todo = Todo.objects.get(id=pk)
+    user = request.user
+    todo = Todo.objects.get(pk=pk)
 
     form = TodoForm(instance=todo)
     form.fields['task_group'].queryset = Todo_Group.objects.filter(user=request.user)
@@ -204,15 +216,53 @@ def updateTodo(request, pk):
         form = TodoForm(request.POST, instance=todo)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            reminder_time = form.cleaned_data['reminder_time']
+            reminder_hour = reminder_time[0:2]
+            reminder_minute = reminder_time[3:5]
+            if form.instance.daily_reminder == True:
+                try:
+                    periodic_task = PeriodicTask.objects.get(name='Reminder'+'_'+str(user)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk))
+                    periodic_task.enabled = True
+                    periodic_task.save()
+                except:
+                    schedule, _ = CrontabSchedule.objects.get_or_create(
+                        minute=int(reminder_minute),
+                        hour=int(reminder_hour),
+                        day_of_week='*',
+                        day_of_month='*',
+                        month_of_year='*',
+                        timezone='Europe/Vilnius',
+                        )
+                    try: 
+                        PeriodicTask.objects.create(
+                            crontab=schedule,
+                            name='Reminder'+'_'+str(user)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk),
+                            task='todo_items.tasks.send_email_task3',
+                            )
+                    except ValidationError:
+                        PeriodicTask.objects.get(
+                            crontab=schedule,
+                            name='Reminder'+'_'+str(user)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk),
+                            task='todo_items.tasks.send_email_task3',
+                            )
+            if form.instance.daily_reminder == False:
+                try:
+                    periodic_task = PeriodicTask.objects.get(name='Reminder'+'_'+str(user)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk))
+                    periodic_task.enabled = False
+                    periodic_task.save()
+                except:
+                    pass
+            next_short = request.path
+            print(f"REQUEST IS {next_short}")
+            return HttpResponseRedirect("/")
 
-    context = {'form':form}
+    context = {'form':form, 'todo':todo}
 
-    return render(request, 'update_todo.html', context)
+    return render(request, 'update_todo_expand.html', context)
 
 
 def deleteTodo(request, pk):
-    item = Todo.objects.get(id=pk)
+    item = Todo.objects.get(pk=pk)
 
     if request.method == 'POST':
         item.delete()
