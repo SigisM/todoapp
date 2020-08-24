@@ -93,6 +93,21 @@ def index(request):
 
 
 @login_required
+def group_list(request):
+    todos = Todo.objects.all()
+    form = TodoForm()
+    form.fields['task_group'].queryset = Todo_Group.objects.filter(user=request.user)
+
+    if request.method =='POST':
+        form = TodoForm(request.POST)
+    context = {'todos':todos,
+            'form':form,
+            }
+
+    return render(request, 'group_filter.html', context)
+
+
+@login_required
 def list_group(request):
     groups = Todo_Group.objects.all()
     form = GroupForm()
@@ -102,13 +117,18 @@ def list_group(request):
         form.instance.user = request.user
         if form.is_valid():
             group_name = form.cleaned_data['group_name']
-            if Todo_Group.objects.filter(group_name=group_name).exists():
+            if Todo_Group.objects.filter(group_name=group_name, user=request.user).exists():
                 error_message = "Group name already exists!" 
                 return render(request, 'group_list.html', {'form': form, 'error_message': error_message})
             else:
                 form.save()
+                form = GroupForm()
+                success_message = "Group sucessfully created!"
+
+            return render(request, 'group_list.html', {'form': form, 'success_message': success_message})
 
         return HttpResponseRedirect(request.path)
+
 
     context = {'groups':groups,
             'form':form,
@@ -190,6 +210,7 @@ def updateTodo(request, pk):
     todo = Todo.objects.get(pk=pk)
 
     form = TodoForm(instance=todo)
+    form.fields['task_group'].queryset = Todo_Group.objects.filter(user=request.user)
 
     if request.method == 'POST':
         form = TodoForm(request.POST, instance=todo)

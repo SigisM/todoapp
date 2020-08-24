@@ -7,6 +7,8 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path('', views.index, name='list_page'),
     path('groups/', views.list_group, name='groups_page'),
+    path('groups_list/', views.group_list, name='groups_list'),
+    path('groups/', views.list_group, name='groups_page'),
     path('today/', views.today, name='today_page'),
     path('seven_days/', views.seven_days, name='seven_days_page'),
     path('register/', views.register, name='register_page'),

@@ -2,18 +2,51 @@
 
 
 {% block group_list %}
-
     <div class="todo_list">
-        <h4>Add a group</h4>
+        <h4>Create a group</h4>
         <form method="POST" action="">
             {% csrf_token %}
-            <table>
-                {{form.group_name.label_tag}}{{form.group_name}}
-            </table>
-            <input class="btn btn-info" type="submit" name="Create Group">
+            {{form.group_name.label_tag}}
+            {{form.group_name}}
+            <input class="btn btn-info" type="submit" name="createGroup" value="Create">
         </form>
         {% if error_message %}
-            <p>{{ error_message }}</p>
+            <p style="font-size: 12px; color: red">{{ error_message }}</p>
         {% endif %}
+        {% if success_message %}
+            <p>{{ success_message }}</p>
+        {% endif %}
+    </div>
+
+    <div class="todo_list">
+        <form method="GET" action="{% url 'groups_page' %}"></form>
+            {% csrf_token %}
+            <p>Choose group to display tasks</p>
+            {{form2.task_group.label_tag}}
+            {{form2.task_group}}
+            <input class="btn btn-info" type="submit" name="selectGroup" value="Filter"></form></div>
+
+    <div class="todo">
+        <label><h3 class="collapsed_today">{{form2.task_group.value}}</h3></label>
+        <span class="number_of_count">{{todos_by_groups|length}}</span>
+        {% for todo in todos_by_groups %}
+            <a href="{% url 'update_todo' todo.pk %}" target='myIframe'>
+                <div class="todo_rows_today">
+                    <input type="checkbox" name="checkbox_check"{% if todo.completed %} checked {% endif %} style="margin-left: 10px; vertical-align: middle;">
+                    {% if todo.completed == True %}
+                        <label class="checked">{{todo}}</label>
+                    {% else %}
+                        <label class="unchecked">{{todo}}</label>
+                    {% endif %}
+                        <span class="time">{{todo.created|date:"Y m d"}}</span>
+
+                </div>
+            </a>
+                {% empty %}
+                <div class="todo_rows">
+                    <span>There's no items in this list</span>
+                </div>
+        {% endfor  %}
+
     </div>
 {% endblock%}
