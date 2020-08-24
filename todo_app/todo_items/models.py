@@ -10,4 +10,8 @@ class Todo(models.Model):
     created = models.DateField(default=datetime.date.today)
 
     def __str__(self):
+<<<<<<< Updated upstream
         return self.title
+=======
+        return '%s %s' % (self.title, self.task_group)
+>>>>>>> Stashed changes

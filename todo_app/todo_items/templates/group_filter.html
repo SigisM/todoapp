@@ -1,0 +1,11 @@
+
+
+{% block list_group %}
+    <div class="todo_list">
+        <form method="POST" action="group_filter.html">
+            {% csrf_token %}
+            <p>BLABLABLA</p>
+            {{form.task_group.label_tag}}
+            {{form.task_group}}
+            <input class="btn btn-info" type="submit" name="selectGroup" value="Create">
+{% endblock%}
