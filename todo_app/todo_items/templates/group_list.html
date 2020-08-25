@@ -3,12 +3,13 @@
 
 {% block group_list %}
     <div class="todo_list">
-        <h4>Create a group</h4>
-        <form method="POST" action="">
+        <h4>Create new group</h4>
+        <form method="POST" action="{% url 'groups_page' %}">
             {% csrf_token %}
             {{form.group_name.label_tag}}
             {{form.group_name}}
             <input class="btn btn-info" type="submit" name="createGroup" value="Create">
+            <input onclick="return confirm('Are you sure you want to delete this group?')" class="btn btn-info" type="submit" name='deleteGroup' value="Delete">
         </form>
         {% if error_message %}
             <p style="font-size: 12px; color: red">{{ error_message }}</p>
@@ -19,17 +20,23 @@
     </div>
 
     <div class="todo_list">
-        <form method="GET" action="{% url 'groups_page' %}"></form>
-            {% csrf_token %}
-            <p>Choose group to display tasks</p>
-            {{form2.task_group.label_tag}}
-            {{form2.task_group}}
-            <input class="btn btn-info" type="submit" name="selectGroup" value="Filter"></form></div>
-
+        <form>
+            <h5>Choose group to filter tasks</h5>
+            <select id="inputState" name='category' style="width: 250px; height: 40px;">
+            <option value="" disabled selected hidden>Choose...</option>
+            {% for cat in categories %}
+            <option value="{{cat}}">{{cat}}</option>
+            {% endfor %}
+            </select>
+            
+            <button type="submit" class="btn btn-info">Filter</button>
+        </form>
+    </div>
+    
     <div class="todo">
-        <label><h3 class="collapsed_today">{{form2.task_group.value}}</h3></label>
-        <span class="number_of_count">{{todos_by_groups|length}}</span>
-        {% for todo in todos_by_groups %}
+        <label><h3 class="collapsed_today">{{category|default_if_none:'All Tasks'}}</h3></label>
+        <span class="number_of_count">{{queryset|length}}</span>
+        {% for todo in queryset %}
             <a href="{% url 'update_todo' todo.pk %}" target='myIframe'>
                 <div class="todo_rows_today">
                     <input type="checkbox" name="checkbox_check"{% if todo.completed %} checked {% endif %} style="margin-left: 10px; vertical-align: middle;">
@@ -46,7 +53,6 @@
                 <div class="todo_rows">
                     <span>There's no items in this list</span>
                 </div>
-        {% endfor  %}
-
+        {% endfor %}
     </div>
 {% endblock%}

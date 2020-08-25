@@ -35,7 +35,7 @@ class GroupForm(forms.ModelForm):
         model = Todo_Group
         fields = ['group_name']
         widgets = {
-            'group_name':forms.TextInput(attrs={'size': '40'}),
+            'group_name':forms.TextInput(attrs={'size': '38'}),
         }
 
 

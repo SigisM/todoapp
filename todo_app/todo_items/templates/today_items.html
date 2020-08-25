@@ -15,13 +15,13 @@
     </div>
 
 
-<div class="todo">
-        <label><h3 class="collapsed_today">TODAY'S TASKS</h3></label>
+    <div class="todo">
+        <label><h3 class="collapsed_today">{{name}}</h3></label>
         <span class="number_of_count">{{todos_today|length}}</span>
         {% for todo in todos_today %}
             <a href="{% url 'update_todo' todo.pk %}" target='myIframe'>
                 <div class="todo_rows_today">
-                    <input type="checkbox" name="checkbox_check"{% if todo.completed %} checked {% endif %} style="margin-left: 10px; vertical-align: middle;">
+                    <input type="checkbox" disabled name="checkbox_check"{% if todo.completed %} checked {% endif %} style="margin-left: 10px; vertical-align: middle;">
                     {% if todo.completed == True %}
                         <label class="checked">{{todo}}</label>
                     {% else %}
@@ -35,7 +35,7 @@
                 <div class="todo_rows">
                     <span>There's no items in this list</span>
                 </div>
-        {% endfor  %}
+        {% endfor %}
 
 </div>
 {% endblock %}

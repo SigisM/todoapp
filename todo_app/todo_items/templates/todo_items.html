@@ -22,7 +22,7 @@
         {% for todo in todos_today %}
             <a href="{% url 'update_todo' todo.pk %}" target='myIframe'>
                 <div class="todo_rows_today">
-                    <input type="checkbox" name="checkbox_check"{% if todo.completed %} checked {% endif %} style="margin-left: 10px; vertical-align: middle;">
+                    <input type="checkbox" disabled name="checkbox_check"{% if todo.completed %} checked {% endif %} style="margin-left: 10px; vertical-align: middle;">
                     {% if todo.completed == True %}
                         <label class="checked">{{todo}}</label>
                     {% else %}
@@ -44,7 +44,7 @@
         {% for todo in todos_future %}
             <a href="{% url 'update_todo' todo.pk %}" target='myIframe'>
                 <div class="todo_rows_future">
-                    <input type="checkbox" name="checkbox_check"{% if todo.completed %} checked {% endif %} style="margin-left: 10px; vertical-align: middle">
+                    <input type="checkbox" disabled name="checkbox_check"{% if todo.completed %} checked {% endif %} style="margin-left: 10px; vertical-align: middle">
                     {% if todo.completed == True %}
                         <label class="checked">{{todo}}</label>
                     {% else %}
