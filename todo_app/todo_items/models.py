@@ -25,7 +25,7 @@ class Todo(models.Model):
 
 
     def __str__(self):
-        return '%s' % (self.title)
+        return self.title
     
     # def __unicode__(self):
         # return u"{}".format(self.task_group.group_name)

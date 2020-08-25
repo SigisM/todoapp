@@ -30,10 +30,15 @@ def create_default_group(sender, instance, **kwargs):
         Todo_Group.objects.create(group_name=group_name, user=instance)
 
 
-@receiver(post_delete, sender=Todo)
-def handle_deleted_profile(sender, instance, **kwargs):
-    if instance.task_group:
-        instance.task_group.delete()
+def set_default_group(request):
+    todos = Todo.objects.filter(author=request.user)
+    category = Todo_Group.objects.get(user=request.user, group_name = "Uncategorised")
+    # print(f"CATEGORY IS {category}")
+    for todo in todos:
+        if not todo.task_group:
+            todo.task_group = category
+            todo.save()
+
 
 
 def register(response):
@@ -74,12 +79,9 @@ def is_valid_queryparam(param):
 
 @login_required
 def create_delete_list_group(request, **kwargs):
-    groups = Todo_Group.objects.all()
     form = GroupForm()
-
     qs = Todo.objects.filter(author=request.user)
     categories = Todo_Group.objects.filter(user=request.user)
-
     category = request.GET.get('category')
 
     if is_valid_queryparam(category):
@@ -119,10 +121,22 @@ def create_delete_list_group(request, **kwargs):
             if form.is_valid():
                 item = form.cleaned_data['group_name']
                 cat_to_delete = Todo_Group.objects.filter(user=request.user)
+                if item == "Uncategorised":
+                    form = GroupForm()
+                    forbid_message = "Group 'Uncategorised' is a default group, thus it cannot be deleted"
+                    context = {'form': form,
+                            'forbid_message': forbid_message,
+                            'queryset':qs,
+                            'categories':categories,
+                            'category':category,
+                        }
+                    return render(request, 'group_list.html', context)
+
                 if cat_to_delete.filter(group_name=item).exists():
                     cat_to_delete.filter(group_name=item).delete()
                     form = GroupForm()
                     success_message = "Group sucessfully deleted!"
+                    set_default_group(request)
                     context = {'form': form,
                             'success_message': success_message,
                             'queryset':qs,
