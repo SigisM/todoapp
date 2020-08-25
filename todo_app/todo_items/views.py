@@ -73,7 +73,7 @@ def is_valid_queryparam(param):
 
 
 @login_required
-def list_group(request, **kwargs):
+def create_delete_list_group(request, **kwargs):
     groups = Todo_Group.objects.all()
     form = GroupForm()
 
