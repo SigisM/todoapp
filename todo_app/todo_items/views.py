@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django_celery_beat.models import CrontabSchedule, PeriodicTask
 from django.http import HttpResponseRedirect, HttpResponse
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 import datetime
 
@@ -28,6 +28,12 @@ def create_default_group(sender, instance, **kwargs):
         return False
     else:
         Todo_Group.objects.create(group_name=group_name, user=instance)
+
+
+@receiver(post_delete, sender=Todo)
+def handle_deleted_profile(sender, instance, **kwargs):
+    if instance.task_group:
+        instance.task_group.delete()
 
 
 def register(response):
@@ -62,6 +68,88 @@ def login(request):
     return render(request, 'registration/login.html')
 
 
+def is_valid_queryparam(param):
+    return param !="" and param is not None
+
+
+@login_required
+def list_group(request, **kwargs):
+    groups = Todo_Group.objects.all()
+    form = GroupForm()
+
+    qs = Todo.objects.filter(author=request.user)
+    categories = Todo_Group.objects.filter(user=request.user)
+
+    category = request.GET.get('category')
+
+    if is_valid_queryparam(category):
+        qs = qs.filter(task_group__group_name__icontains = category)
+
+    if request.method =='POST':
+        if 'createGroup' in request.POST:
+            form = GroupForm(request.POST)
+            form.instance.user = request.user
+            if form.is_valid():
+                group_name = form.cleaned_data['group_name']
+                if Todo_Group.objects.filter(group_name=group_name, user=request.user).exists():
+                    error_message = "Group name already exists!"
+                    context = {'form': form,
+                            'error_message': error_message,
+                            'queryset':qs,
+                            'categories':categories,
+                            'category':category,
+                        }
+                    return render(request, 'group_list.html', context)
+                else:
+                    form.save()
+                    form = GroupForm()
+                    success_message = "Group sucessfully created!"
+                    context = {'form': form,
+                            'success_message': success_message,
+                            'queryset':qs,
+                            'categories':categories,
+                            'category':category,
+                        }
+
+                    return render(request, 'group_list.html', context)
+
+        elif 'deleteGroup' in request.POST:
+            form = GroupForm(request.POST)
+            form.instance.user = request.user
+            if form.is_valid():
+                item = form.cleaned_data['group_name']
+                cat_to_delete = Todo_Group.objects.filter(user=request.user)
+                if cat_to_delete.filter(group_name=item).exists():
+                    cat_to_delete.filter(group_name=item).delete()
+                    form = GroupForm()
+                    success_message = "Group sucessfully deleted!"
+                    context = {'form': form,
+                            'success_message': success_message,
+                            'queryset':qs,
+                            'categories':categories,
+                            'category':category,
+                        }
+                    return render(request, 'group_list.html', context)
+                else:
+                    error_message = "Group name does not exist!"
+                    context = {'form': form,
+                            'error_message': error_message,
+                            'queryset':qs,
+                            'categories':categories,
+                            'category':category,
+                        }
+                    return render(request, 'group_list.html', context)
+
+
+    context = {'form': form,
+            'queryset':qs,
+            'categories':categories,
+            'category':category,
+        }
+
+    return render(request, 'group_list.html', context)
+
+
 @login_required
 def index(request):
     user = request.user
@@ -90,52 +178,6 @@ def index(request):
             }
         
     return render(request, 'todo_items.html', context)
-
-
-@login_required
-def group_list(request):
-    todos = Todo.objects.all()
-    form = TodoForm()
-    form.fields['task_group'].queryset = Todo_Group.objects.filter(user=request.user)
-
-    if request.method =='POST':
-        form = TodoForm(request.POST)
-    context = {'todos':todos,
-            'form':form,
-            }
-
-    return render(request, 'group_filter.html', context)
-
-
-@login_required
-def list_group(request):
-    groups = Todo_Group.objects.all()
-    form = GroupForm()
-
-    if request.method =='POST':
-        form = GroupForm(request.POST)
-        form.instance.user = request.user
-        if form.is_valid():
-            group_name = form.cleaned_data['group_name']
-            if Todo_Group.objects.filter(group_name=group_name, user=request.user).exists():
-                error_message = "Group name already exists!" 
-                return render(request, 'group_list.html', {'form': form, 'error_message': error_message})
-            else:
-                form.save()
-                form = GroupForm()
-                success_message = "Group sucessfully created!"
-
-            return render(request, 'group_list.html', {'form': form, 'success_message': success_message})
-
-        return HttpResponseRedirect(request.path)
-
-
-    context = {'groups':groups,
-            'form':form,
-            }
-
-    return render(request, 'group_list.html', context)
-
 
 
 @login_required
