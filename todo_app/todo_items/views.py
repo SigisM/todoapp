@@ -10,7 +10,6 @@ from datetime import timedelta
 import datetime
 import json
 
-from .tasks import daily_evening_reminder
 from .models import Todo, Todo_Group
 from .forms import RegisterForm, LoginForm, TodoForm, GroupForm
 

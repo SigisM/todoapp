@@ -5,13 +5,14 @@
 <link type="text/css" href="{% static 'css/style.css' %}" rel="stylesheet" >
 
 
-<div>
-    <p>Are you sure you want to delete an item "{{item}}"</p>
-
-    <a href="{% url 'list_page' %}" target='_parent'>Cancel</a>
-
+<div class="delete_method">
+    <div>Are you sure you want to delete an item</div><br \>
+    <div style="font-weight: bold;">{{item}}</div>
+    <br \>
+    <a class="cancel_button" href="{% url 'list_page' %}" target='_parent'>Cancel</a>
+    <br \>
     <form method="POST" target='_parent' action="">
         {% csrf_token %}
-        <input type="submit" name='Confirm'>
+        <input class="btn btn-outline-primary" type="submit" value='Yes'>
     </form>
 </div>
