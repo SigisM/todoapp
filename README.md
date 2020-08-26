@@ -30,8 +30,7 @@ Despite this there is a workaround. Use it at your own risk. Author of this app,
 
 ## First steps
 
-* Install Pipenv tool for easy living with virtual environments<br />
-* [pipenv official](https://pypi.org/project/pipenv/)
+* Install [Pipenv](https://pypi.org/project/pipenv/) tool for easy living with virtual environments<br />
 `$ pip install pipenv`
 
 * Run virtual environment<br />
