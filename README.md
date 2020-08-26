@@ -23,10 +23,10 @@ Latest version(not necessary):
 * [installing docker](https://hub.docker.com/editions/community/docker-ce-desktop-windows/)
 
 ### Windows 10 Home (At your own risk)
-Normally, Docker is not meant to be installed on Windows Home edition since Home version of Windows don't support Hyper-V virtualization.<br \>
+Normally, Docker is not meant to be installed on Windows Home edition since Home version of Windows don't support Hyper-V virtualization.<br />
 Despite this there is a workaround. Use it at your own risk. Author of this app, by the way, uses Windows Home :)
 * [installing docker](https://docs.docker.com/docker-for-windows/install-windows-home/#install-docker-desktop-on-windows-10-home)
-* [installing docker](https://itnext.io/install-docker-on-windows-10-home-d8e621997c1d)
+* [workaround](https://itnext.io/install-docker-on-windows-10-home-d8e621997c1d)
 
 ## First steps
 
