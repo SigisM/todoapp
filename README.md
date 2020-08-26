@@ -83,7 +83,7 @@ The App itself is self-explanatory, however there are two things for Celery Task
 * Make sure you run the Celery Beat. Beat is a scheduller/planner itself<br />
 `$ celery -A todo_app beat --scheduler django --loglevel=info`
 
-By default Periodic tasks are schedulled twice a day (08:00 and 16:00 `timezone:'Europe/Vilnius'`).
+By default Periodic tasks in this App are schedulled twice a day (08:00 and 16:00 `timezone:'Europe/Vilnius'`).<br />
 Periodic tasks schedule may be changed or added in **celery.py** (dir where *settings.py* is)
 ```
 from celery.task.schedules import crontab
@@ -94,13 +94,13 @@ app.conf.beat_schedule = {
         'schedule': crontab(minute=0, hour=8, day_of_week="*"),
     },
     'any_name2': {
-        'task': 'proj.task_to_fire_name2',
+        'task': 'proj.tasks.task_to_fire_name2',
         'schedule': crontab(minute=0, hour=16, day_of_week="*"),
     },
 }
 ```
 
-Periodic tasks itself may be changed/added or deleted in **tasks.py** file of the app.
+Periodic tasks itself may be changed, added or deleted in **tasks.py** file of the App.
 ```
 @app.task
 def task_to_fire_name(args):
