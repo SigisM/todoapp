@@ -71,9 +71,6 @@
             <li class="menu"><a href="/seven_days">Next 7 days</a></li>
             <li class="menu"><a href="/">All Tasks</a></li>
             <li class="menu"><a href="/groups">Groups/Create</a></li>
-
-
-
         </ul>
         {% elif user.is_anonymous %}
         <ul>
@@ -106,7 +103,7 @@
         {% endblock %}
     </div>
     <div class="update" style="display: none;">
-       <iframe class="myIframe" name="myIframe" height="100%" width="100%" src='about:blank'></iframe>
+       <iframe class="myIframe" name="myIframe" src='about:blank'></iframe>
     </div>
     {% endif %}
 

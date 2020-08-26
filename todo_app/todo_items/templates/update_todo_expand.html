@@ -29,10 +29,10 @@
         </div>
     </div>
     <div class="save_item">
-        <input type="submit" value="Save item" target="" name="Update ToDo Item">
+        <input class="btn btn-outline-primary" type="submit" value="Save item" target="" name="Update ToDo Item">
 
         <a href="{% url 'delete_todo' todo.id %}" target="">
-            <input style="float: right;" type="button" value="Delete item" />
+            <input class="btn btn-outline-primary" style="float: right;" type="button" value="Delete item" />
         </a>
     </div>
 </form>

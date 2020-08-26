@@ -18,8 +18,8 @@ class TodoForm(forms.ModelForm):
         model = Todo
         fields = ['title', 'created', 'completed', 'daily_reminder', 'reminder_time', 'task_group']
         widgets = {
-            'created': DateInput(),
-            'title': forms.TextInput(attrs={'size': '40'}),
+            'created': DateInput(attrs={'class' : 'date_group'}),
+            'title': forms.TextInput(attrs={'size': '40', 'class' : 'title_group', 'placeholder':" e.g. Arrange report"}),
             'reminder_time': DateTimeInput(format="%H:%M"),
             'task_group': forms.Select(attrs={'class' : 'task_group'})
         }
@@ -35,13 +35,18 @@ class GroupForm(forms.ModelForm):
         model = Todo_Group
         fields = ['group_name']
         widgets = {
-            'group_name':forms.TextInput(attrs={'size': '38'}),
+            'group_name':forms.TextInput(attrs={'class' : 'group_name', 'size': '38', 'placeholder':"e.g. Travel"}),
         }
 
 
 class RegisterForm(UserCreationForm):
-    email = forms.EmailField()
+
+    # email = forms.EmailField
 
     class Meta:
         model = User
         fields = ["username", "email", "password1", "password2"]
+        widgets = {
+            'username':forms.TextInput(attrs={'placeholder':"Your username"}),
+            'email':forms.EmailInput(attrs={'placeholder':"Tasks reminders will be sent to this email"}),
+        }

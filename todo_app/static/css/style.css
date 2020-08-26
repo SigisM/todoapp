@@ -5,14 +5,26 @@
 }
 
 .task_group {
-    height: 30px;
-    width: 200px;
-    margin-top: 5px;
+    height: 40px;
+    width: 235px;
+}
+
+.group_name {
+    height: 40px;
+}
+
+.title_group {
+    height: 40px;
+}
+
+.date_group {
+    height: 40px;
 }
 
 body {
     font-family: myfont, serif;
 }
+
 
 .save_item {
     position: fixed;
@@ -25,8 +37,46 @@ body {
     margin-left: 220px;
 }
 
+.cancel_button {
+    border: solid 1px;
+    border-color: rgb(0, 123, 255);
+    color: rgb(0, 123, 255);
+    border-radius: 4px;
+    height: 37px;
+    line-height: 37px;
+    width: 77px;
+    display: table;
+    margin: auto;
+    text-align: center;
+    vertical-align: middle;
+
+}
+
+.cancel_button:hover {
+    color: white;
+    background-color: rgb(0, 123, 255);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.delete_method{
+    width: 100%;
+    height: 100%;
+    display: table;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.myIframe {
+    margin-left: 8px;
+    margin-top: 6px;
+    width: 96%;
+    height: 96%;
+    border: none;
+}
+
 .update {
-    display: inline-block;
+    display: table;
     width: 400px ;
     margin-left: 900px;
     position: fixed;
@@ -34,8 +84,8 @@ body {
     border: 2 px;
     border-style: solid;
     border-radius: 10px;
-    border-color: steelblue;
-    box-shadow: 7px 0px 5px grey;
+    border-color: rgb(1, 118, 214);
+    /* box-shadow: 7px 0px 5rgb(19, 9, 9)rey; */
 }
 
 .todo {
@@ -46,8 +96,8 @@ body {
     border: 2 px;
     border-style: solid;
     border-radius: 10px;
-    border-color: steelblue;
-    box-shadow: 7px 0px 5px grey;
+    border-color: rgb(1, 118, 214);
+    /* box-shadow: 7px 0px 5px grey; */
 }
 
 .todo_list{
