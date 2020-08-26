@@ -45,9 +45,10 @@ Despite this there is a workaround. Use it at your own risk. Author of this app,
 ![Dependencies](img/pip_list.png?raw=true "Pip list")
 
 Before starting the MySQL server you can configure *docker-compose.yml* file in the root folder of the project:<br />
-**MYSQL_PASSWORD:** default is *admin*
-**MYSQL_ROOT_PASSWORD:** default is *admin*
-**ports:** default is *3308:3306*
+**MYSQL_PASSWORD:** default is *admin*<br />
+**MYSQL_ROOT_PASSWORD:** default is *admin*<br />
+**ports:** default is *3308:3306*<br />
+
 * Start MySQL server locally<br />
 `$ docker-compose up -d`
 
