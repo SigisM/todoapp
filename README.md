@@ -115,5 +115,5 @@ def task_to_fire_name2(args):
 
 # Links
 
-[Celery](https://docs.celeryproject.org/en/stable/)
-[Django-Celery-Beat](https://django-celery-beat.readthedocs.io/en/latest/)
+[Celery](https://docs.celeryproject.org/en/stable/)<br />
+[Django-Celery-Beat](https://django-celery-beat.readthedocs.io/en/latest/)<br />
