@@ -15,14 +15,14 @@ First Login with your SuperUser.<br />
 Before running the server, install docker.
 
 Latest version(not necessary):
-###Linux
+### Linux
 * [installing docker](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04)
 * [installing docker compose](https://docs.docker.com/compose/install/)
 
-###Windows 10 Professional or Enterprise 64-bit (Get stable)
+### Windows 10 Professional or Enterprise 64-bit (Get stable)
 * [installing docker](https://hub.docker.com/editions/community/docker-ce-desktop-windows/)
 
-###Windows 10 Home (At your own risk)
+### Windows 10 Home (At your own risk)
 Normally, Docker is not meant to be installed on Windows Home edition since Home version of Windows don't support Hyper-V virtualization.<br \>
 Despite this there is a workaround. Use it at your own risk. Author of this app, by the way, uses Windows Home :)
 * [installing docker](https://docs.docker.com/docker-for-windows/install-windows-home/#install-docker-desktop-on-windows-10-home)
