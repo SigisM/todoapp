@@ -61,7 +61,7 @@ Before starting the MySQL server you can configure *docker-compose.yml* file in 
 * Create SuperUser (admin)<br />
 `$ python manage.py createsuperuser`
 
-* List running docker containers
+* List running docker containers<br />
 `$ sudo docker ps`
 
 You should see two running containers with their STATUS: UP
@@ -70,7 +70,7 @@ You should see two running containers with their STATUS: UP
 * Run server<br />
 `$ python manage.py runserver`
 
-* Hop on [Localhost:8000](http://http://127.0.0.1:8000/) and you are ready to go
+* Hop on [Localhost:8000](http://http://127.0.0.1:8000/) and you are ready to go<br />
 
 
 # Instruction Manual
