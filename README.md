@@ -77,7 +77,7 @@ You should see two running containers with their STATUS: UP
 
 The App itself is self-explanatory, however there are two things for Celery Tasks and Periodic tasks to be working.
 
-* Make sure you run the Celery Worker. Worker runs scheduled tasks planned by Celery Beat<br />
+* Make sure you run the Celery Worker. Worker runs tasks scheduled by Celery Beat<br />
 `$ celery -A todo_app worker --scheduler django --loglevel=info`
 
 * Make sure you run the Celery Beat. Beat is a scheduller/planner itself<br />
