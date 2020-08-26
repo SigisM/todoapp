@@ -14,15 +14,6 @@ from .tasks import daily_evening_reminder
 from .models import Todo, Todo_Group
 from .forms import RegisterForm, LoginForm, TodoForm, GroupForm
 
-now = datetime.datetime.today()
-tomorrow_1 = datetime.date.today() + datetime.timedelta(days=1)
-tomorrow_2 = datetime.date.today() + datetime.timedelta(days=2)
-tomorrow_3 = datetime.date.today() + datetime.timedelta(days=3)
-tomorrow_4 = datetime.date.today() + datetime.timedelta(days=4)
-tomorrow_5 = datetime.date.today() + datetime.timedelta(days=5)
-tomorrow_6 = datetime.date.today() + datetime.timedelta(days=6)
-tomorrow_7 = datetime.date.today() + datetime.timedelta(days=7)
-
 
 @receiver(post_save, sender=User)
 def create_default_group(sender, instance, **kwargs):
@@ -168,14 +159,12 @@ def create_delete_list_group(request, **kwargs):
 
 @login_required
 def index(request):
-    user = request.user
-    todos = Todo.objects.filter(author=user)
-    todos_today = Todo.objects.filter(created=now, author=user)
-    todos_completed_before = Todo.objects.filter(completed=True, created__lt=now, author=user)
-    todos_future = Todo.objects.filter(created__gt=now, author=user)
-    todos_uncompleted_before = Todo.objects.filter(completed=False, created__lt=now, author=user)
+    todos_today = Todo.objects.filter(created=datetime.datetime.today(), author=request.user)
+    todos_completed_before = Todo.objects.filter(completed=True, created__lt=datetime.datetime.today(), author=request.user)
+    todos_future = Todo.objects.filter(created__gt=datetime.datetime.today(), author=request.user)
+    todos_uncompleted_before = Todo.objects.filter(completed=False, created__lt=datetime.datetime.today(), author=request.user)
     form = TodoForm()
-    form.fields['task_group'].queryset = Todo_Group.objects.filter(user=user)
+    form.fields['task_group'].queryset = Todo_Group.objects.filter(user=request.user)
     
     if request.method =='POST':
         
@@ -185,8 +174,7 @@ def index(request):
             form.save()
         return redirect('/')
 
-    context = {'todos':todos,
-            'todos_completed_before':todos_completed_before,
+    context = {'todos_completed_before':todos_completed_before,
             'todos_future':todos_future,
             'todos_uncompleted_before':todos_uncompleted_before,
             'todos_today':todos_today,
@@ -198,11 +186,9 @@ def index(request):
 
 @login_required
 def today(request):
-    user = request.user
-    todos = Todo.objects.filter(author=user)
-    todos_today = Todo.objects.filter(created=now, author=user)
+    todos_today = Todo.objects.filter(created=datetime.datetime.today(), author=request.user)
     form = TodoForm()
-    form.fields['task_group'].queryset = Todo_Group.objects.filter(user=user)
+    form.fields['task_group'].queryset = Todo_Group.objects.filter(user=request.user)
 
     if request.method =='POST':
         
@@ -212,8 +198,7 @@ def today(request):
             form.save()
         return HttpResponseRedirect(request.path)
 
-    context = {'todos':todos,
-            'todos_today':todos_today,
+    context = {'todos_today':todos_today,
             'form':form,
             }
         
@@ -222,17 +207,15 @@ def today(request):
 
 @login_required
 def seven_days(request):
-    user = request.user
-    todos = Todo.objects.filter(author=user)
-    todos_today = Todo.objects.filter(created=now, author=user)
-    todos_tomorrow_1 = Todo.objects.filter(created__gt=now, created__lt=tomorrow_2, author=user)
-    todos_tomorrow_2 = Todo.objects.filter(created__gt=tomorrow_1, created__lt=tomorrow_3, author=user)
-    todos_tomorrow_3 = Todo.objects.filter(created__gt=tomorrow_2, created__lt=tomorrow_4, author=user)
-    todos_tomorrow_4 = Todo.objects.filter(created__gt=tomorrow_3, created__lt=tomorrow_5, author=user)
-    todos_tomorrow_5 = Todo.objects.filter(created__gt=tomorrow_4, created__lt=tomorrow_6, author=user)
-    todos_tomorrow_6 = Todo.objects.filter(created__gt=tomorrow_5, created__lt=tomorrow_7, author=user)
+    todos_today = Todo.objects.filter(created=datetime.datetime.today(), author=request.user)
+    todos_tomorrow_1 = Todo.objects.filter(created=(datetime.date.today() + datetime.timedelta(days=1)), author=request.user)
+    todos_tomorrow_2 = Todo.objects.filter(created=(datetime.date.today() + datetime.timedelta(days=2)), author=request.user)
+    todos_tomorrow_3 = Todo.objects.filter(created=(datetime.date.today() + datetime.timedelta(days=3)), author=request.user)
+    todos_tomorrow_4 = Todo.objects.filter(created=(datetime.date.today() + datetime.timedelta(days=4)), author=request.user)
+    todos_tomorrow_5 = Todo.objects.filter(created=(datetime.date.today() + datetime.timedelta(days=5)), author=request.user)
+    todos_tomorrow_6 = Todo.objects.filter(created=(datetime.date.today() + datetime.timedelta(days=6)), author=request.user)
     form = TodoForm()
-    form.fields['task_group'].queryset = Todo_Group.objects.filter(user=user)
+    form.fields['task_group'].queryset = Todo_Group.objects.filter(user=request.user)
 
     if request.method =='POST':
         
@@ -242,8 +225,7 @@ def seven_days(request):
             form.save()
         return HttpResponseRedirect(request.path_info)
 
-    context = {'todos':todos,
-            'todos_today':todos_today,
+    context = {'todos_today':todos_today,
             'todos_tomorrow_1':todos_tomorrow_1,
             'todos_tomorrow_2':todos_tomorrow_2,
             'todos_tomorrow_3':todos_tomorrow_3,
@@ -251,20 +233,12 @@ def seven_days(request):
             'todos_tomorrow_5':todos_tomorrow_5,
             'todos_tomorrow_6':todos_tomorrow_6,
             'form':form,
-            'tomorrow1':tomorrow_1,
-            'tomorrow2':tomorrow_2,
-            'tomorrow3':tomorrow_3,
-            'tomorrow4':tomorrow_4,
-            'tomorrow5':tomorrow_5,
-            'tomorrow6':tomorrow_6,
-            'now':now,
             }
         
     return render(request, '7days_items.html', context)
 
 
 def updateTodo(request, pk):
-    user = request.user
     todo = Todo.objects.get(pk=pk)
 
     form = TodoForm(instance=todo)
@@ -280,7 +254,7 @@ def updateTodo(request, pk):
             reminder_minute = reminder_time[3:5]
             if form.instance.daily_reminder == True:
                 try:
-                    periodic_task = PeriodicTask.objects.get(name='Reminder'+'_'+str(user)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk))
+                    periodic_task = PeriodicTask.objects.get(name='Reminder'+'_'+str(request.user)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk))
                     periodic_task.enabled = True
                     periodic_task.save()
                 except:
@@ -295,24 +269,22 @@ def updateTodo(request, pk):
                     try: 
                         PeriodicTask.objects.create(
                             crontab=schedule,
-                            name='Reminder'+'_'+str(user)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk),
+                            name='Reminder'+'_'+str(request.user)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk),
                             task='todo_items.tasks.one_off_task_reminder',
-                            args=json.dumps([title, 'This is a reminder for your task!', user.email]),
+                            args=json.dumps([title, 'This is a reminder for your task!', request.user.email]),
                             one_off=True,
-                            # expires=datetime.datetime.now() + timedelta(seconds=30)
                             )
                     except ValidationError:
                         PeriodicTask.objects.get(
                             crontab=schedule,
-                            name='Reminder'+'_'+str(user)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk),
+                            name='Reminder'+'_'+str(request.user)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk),
                             task='todo_items.tasks.one_off_task_reminder',
-                            args=json.dumps([title, 'This is a reminder for your task!', user.email]),
+                            args=json.dumps([title, 'This is a reminder for your task!', request.user.email]),
                             one_off=True,
-                            # expires=datetime.datetime.now() + timedelta(seconds=30)
                             )
             if form.instance.daily_reminder == False:
                 try:
-                    periodic_task = PeriodicTask.objects.get(name='Reminder'+'_'+str(user)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk))
+                    periodic_task = PeriodicTask.objects.get(name='Reminder'+'_'+str(request.user)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk))
                     periodic_task.enabled = False
                     periodic_task.save()
                 except:
