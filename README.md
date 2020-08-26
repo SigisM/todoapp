@@ -94,7 +94,7 @@ app.conf.beat_schedule = {
         'schedule': crontab(minute=0, hour=8, day_of_week="*"),
     },
     'any_name2': {
-        'task': 'todo_items.task_to_fire_name2',
+        'task': 'proj.task_to_fire_name2',
         'schedule': crontab(minute=0, hour=16, day_of_week="*"),
     },
 }
