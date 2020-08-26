@@ -39,10 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'todo_items',
-    'shopping_items',
     'crispy_forms',
     'django_celery_beat',
-    'django_filters',
 ]
 
 MIDDLEWARE = [
