@@ -85,21 +85,21 @@
         {% endif %}
         {% endblock %}
     </div>
-
-    
-
-    {% if user.is_anonymous %}
     <div class="login">
-        <p class="register_list">Welcome, new user. Please log in to see the content.</p>
         {% block login %}
         {% endblock %}
         {% block register %}
         {% endblock %}
+    {% if user.is_anonymous %}
+        <p class="register_list">Welcome, new user. Please log in to see the content.</p>
+
+
         {% endif %}
     </div>
     
     {% if user.is_authenticated %}
     <div class="login">
+    
         {% block group_list %}
         {% endblock %}
         {% block content %}

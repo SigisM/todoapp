@@ -1,10 +1,20 @@
 {% extends 'base.html' %}
 
 {% block title %}Create an Account{% endblock %}
+
+
 {% load crispy_forms_tags %}
 
 {% block register %}
 
+{% if user.is_authenticated %}
+<div class="todo_list">
+<h4>You are already registered</h4>
+<h4><a href="/logout">Logout</a> to register new user</h4>
+</div>
+{% endif %}
+
+{% if user.is_anonymous %}
 <div class="register_list">
     <form method="POST" class="form-group">
 	{% csrf_token %}
@@ -12,4 +22,5 @@
 	<button type="submit" class="btn btn-info">Register</button>
     </form>
 </div>
+{% endif %}
 {% endblock %}

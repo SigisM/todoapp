@@ -1,13 +1,16 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django_celery_beat.models import CrontabSchedule, PeriodicTask
 from django.http import HttpResponseRedirect, HttpResponse
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save
 from django.dispatch import receiver
+from datetime import timedelta
 import datetime
+import json
 
+from .tasks import daily_evening_reminder
 from .models import Todo, Todo_Group
 from .forms import RegisterForm, LoginForm, TodoForm, GroupForm
 
@@ -33,7 +36,6 @@ def create_default_group(sender, instance, **kwargs):
 def set_default_group(request):
     todos = Todo.objects.filter(author=request.user)
     category = Todo_Group.objects.get(user=request.user, group_name = "Uncategorised")
-    # print(f"CATEGORY IS {category}")
     for todo in todos:
         if not todo.task_group:
             todo.task_group = category
@@ -272,6 +274,7 @@ def updateTodo(request, pk):
         form = TodoForm(request.POST, instance=todo)
         if form.is_valid():
             form.save()
+            title = form.cleaned_data['title']
             reminder_time = form.cleaned_data['reminder_time']
             reminder_hour = reminder_time[0:2]
             reminder_minute = reminder_time[3:5]
@@ -293,13 +296,19 @@ def updateTodo(request, pk):
                         PeriodicTask.objects.create(
                             crontab=schedule,
                             name='Reminder'+'_'+str(user)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk),
-                            task='todo_items.tasks.send_email_task3',
+                            task='todo_items.tasks.one_off_task_reminder',
+                            args=json.dumps([title, 'This is a reminder for your task!', user.email]),
+                            one_off=True,
+                            # expires=datetime.datetime.now() + timedelta(seconds=30)
                             )
                     except ValidationError:
                         PeriodicTask.objects.get(
                             crontab=schedule,
                             name='Reminder'+'_'+str(user)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk),
-                            task='todo_items.tasks.send_email_task3',
+                            task='todo_items.tasks.one_off_task_reminder',
+                            args=json.dumps([title, 'This is a reminder for your task!', user.email]),
+                            one_off=True,
+                            # expires=datetime.datetime.now() + timedelta(seconds=30)
                             )
             if form.instance.daily_reminder == False:
                 try:
@@ -308,8 +317,6 @@ def updateTodo(request, pk):
                     periodic_task.save()
                 except:
                     pass
-            next_short = request.path
-            print(f"REQUEST IS {next_short}")
             return HttpResponseRedirect("/")
 
     context = {'form':form, 'todo':todo}

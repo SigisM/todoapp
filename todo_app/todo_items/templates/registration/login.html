@@ -4,9 +4,20 @@
 Login Here
 {% endblock %}
 
+{% block login %}
+{% if user.is_authenticated %}
+<div class="todo_list">
+<h4>You are already logged in</h4>
+<h4><a href="/logout">Logout</a> to use different user</h4>
+</div>
+{% endif %}
+
+{% if user.is_anonymous %}
+
+
 {% load crispy_forms_tags %}
 
-{% block login %}
+
 <div class="register_list">
     <form method="post" class="from-group">
 	{% csrf_token %}
@@ -15,4 +26,5 @@ Login Here
 	<button type="submit" class="btn btn-info">Login</button>	
     </form>
 </div>
+{% endif %}
 {% endblock %}
