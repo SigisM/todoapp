@@ -56,10 +56,10 @@ Before starting the MySQL server you can configure *docker-compose.yml* file in 
 `$ docker run -d -p 6379:6379 redis`
 
 * Make your first migrations<br />
-`$ python (or python3) manage.py migrate`
+`$ python manage.py migrate`
 
 * Create SuperUser (admin)<br />
-`$ python manage.py createsupennnnnnnnnnnnnnnnnnnnnnnnnnnnruser`
+`$ python manage.py createsuperuser`
 
 * List running docker containers
 `$ sudo docker ps`
