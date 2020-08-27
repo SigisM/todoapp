@@ -4,6 +4,16 @@
 
 }
 
+a {
+    margin-top: 8px;
+    text-decoration: none;
+
+}
+a:hover {
+    margin-top: 8px;
+    color: white;
+    text-decoration: none;
+}
 .task_group {
     height: 40px;
     width: 235px;
@@ -81,10 +91,23 @@ body {
     margin-left: 900px;
     position: fixed;
     height: 350px;
-    border: 2 px;
-    border-style: solid;
+    border: solid;
+    border-width: 1px;
     border-radius: 10px;
-    border-color: rgb(1, 118, 214);
+    border-color: rgb(0, 123, 214);
+    /* box-shadow: 7px 0px 5rgb(19, 9, 9)rey; */
+}
+
+.update_overdue {
+    display: table;
+    width: 400px ;
+    margin-left: 900px;
+    position: fixed;
+    height: 350px;
+    border: solid;
+    border-width: 1px;
+    border-radius: 10px;
+    border-color: rgb(214, 0, 0);
     /* box-shadow: 7px 0px 5rgb(19, 9, 9)rey; */
 }
 
@@ -93,10 +116,10 @@ body {
     position: absolute;
     width: 620px;
     height: auto;
-    border: 2 px;
-    border-style: solid;
+    border: solid;
+    border-width: 1px;
     border-radius: 10px;
-    border-color: rgb(1, 118, 214);
+    border-color:rgb(0, 123, 214);
     /* box-shadow: 7px 0px 5px grey; */
 }
 
@@ -105,7 +128,7 @@ body {
     margin: 20px;
     margin-left: 30px;
     padding: 20px;
-    border-radius: 3px;
+    /* border-radius: 3px; */
 }
 
 .register_list{
@@ -117,7 +140,10 @@ body {
 }
 
 .todo_rows {
-    background-color: lightsteelblue;
+    border: solid;
+    border-width: 1px;
+    border-radius: 4px;
+    border-color: rgb(0, 123, 214);
     margin: 10px;
 
     height: 30px;
@@ -128,9 +154,12 @@ body {
 }
 
 .todo_rows_today {
-    background-color: lightsteelblue;
+    border: solid;
+    border-width: 1px;
+    border-radius: 4px;
+    border-color: rgb(0, 123, 214);
+    /* background-color: lightsteelblue; */
     margin: 10px;
-
     text-decoration: none;
     height: 30px;
     width: 600px;
@@ -146,11 +175,15 @@ body {
 
 .todo_rows_today:hover,
 .todo_rows_today:focus {
-    background-color: steelblue;
+    background-color: rgb(231, 231, 231);
 }
 
 .todo_rows_tomorrow1 {
-    background-color: lightsteelblue;
+    border: solid;
+    border-width: 1px;
+    border-radius: 4px;
+    border-color: rgb(0, 123, 214);
+    /* background-color: lightsteelblue; */
     margin: 10px;
     text-decoration: none;
     height: 30px;
@@ -167,11 +200,15 @@ body {
 
 .todo_rows_tomorrow1:hover,
 .todo_rows_tomorrow1:focus {
-    background-color: steelblue;
+    background-color:  rgb(231, 231, 231);
 }
 
 .todo_rows_tomorrow2 {
-    background-color: lightsteelblue;
+    border: solid;
+    border-width: 1px;
+    border-radius: 4px;
+    border-color: rgb(0, 123, 214);
+    /* background-color: lightsteelblue; */
     margin: 10px;
     text-decoration: none;
     height: 30px;
@@ -188,11 +225,15 @@ body {
 
 .todo_rows_tomorrow2:hover,
 .todo_rows_tomorrow2:focus {
-    background-color: steelblue;
+    background-color: rgb(231, 231, 231);
 }
 
 .todo_rows_tomorrow3 {
-    background-color: lightsteelblue;
+    border: solid;
+    border-width: 1px;
+    border-radius: 4px;
+    border-color: rgb(0, 123, 214);
+    /* background-color: lightsteelblue; */
     margin: 10px;
     text-decoration: none;
     height: 30px;
@@ -209,11 +250,15 @@ body {
 
 .todo_rows_tomorrow3:hover,
 .todo_rows_tomorrow3:focus {
-    background-color: steelblue;
+    background-color:  rgb(231, 231, 231);
 }
 
 .todo_rows_tomorrow4 {
-    background-color: lightsteelblue;
+    border: solid;
+    border-width: 1px;
+    border-radius: 4px;
+    border-color: rgb(0, 123, 214);
+    /* background-color: lightsteelblue; */
     margin: 10px;
     text-decoration: none;
     height: 30px;
@@ -230,11 +275,15 @@ body {
 
 .todo_rows_tomorrow4:hover,
 .todo_rows_tomorrow4:focus {
-    background-color: steelblue;
+    background-color:  rgb(231, 231, 231);
 }
 
 .todo_rows_tomorrow5 {
-    background-color: lightsteelblue;
+    border: solid;
+    border-width: 1px;
+    border-radius: 4px;
+    border-color: rgb(0, 123, 214);
+    /* background-color: lightsteelblue; */
     margin: 10px;
     text-decoration: none;
     height: 30px;
@@ -251,11 +300,15 @@ body {
 
 .todo_rows_tomorrow5:hover,
 .todo_rows_tomorrow5:focus {
-    background-color: steelblue;
+    background-color:  rgb(231, 231, 231);
 }
 
 .todo_rows_tomorrow6 {
-    background-color: lightsteelblue;
+    border: solid;
+    border-width: 1px;
+    border-radius: 4px;
+    border-color: rgb(0, 123, 214);
+    /* background-color: lightsteelblue; */
     margin: 10px;
     text-decoration: none;
     height: 30px;
@@ -272,32 +325,39 @@ body {
 
 .todo_rows_tomorrow6:hover,
 .todo_rows_tomorrow6:focus {
-    background-color: steelblue;
+    background-color:  rgb(231, 231, 231);
 }
 
 .todo_rows_future {
-    background-color: lightsteelblue;
+    border: solid;
+    border-width: 1px;
+    border-radius: 4px;
+    border-color: rgb(0, 123, 214);
+    /* background-color: lightsteelblue; */
     margin: 10px;
-
     height: 30px;
     width: 600px;
     display: block;
     cursor: pointer;
-    
 }
 
 .todo_rows_future, 
 .todo_rows_future * {
      cursor: pointer;
+     text-decoration: none;
 }
 
 .todo_rows_future:hover,
 .todo_rows_future:focus {
-    background-color: steelblue;
+    background-color: rgb(231, 231, 231);
 }
 
 .todo_rows_past {
-    background-color: lightsteelblue;
+    border: solid;
+    border-width: 1px;
+    border-radius: 4px;
+    border-color: rgb(214, 0, 0);
+    /* background-color: lightsteelblue; */
     margin: 10px;
 
     height: 30px;
@@ -314,11 +374,15 @@ body {
 
 .todo_rows_past:hover,
 .todo_rows_past:focus {
-    background-color: steelblue;
+    background-color: rgb(231, 231, 231);
 }
 
 .todo_rows_past_compl {
-    background-color: lightsteelblue;
+    border: solid;
+    border-width: 1px;
+    border-radius: 4px;
+    border-color: rgb(0, 123, 214);
+    /* background-color: lightsteelblue; */
     margin: 10px;
 
     height: 30px;
@@ -335,7 +399,7 @@ body {
 
 .todo_rows_past_compl:hover,
 .todo_rows_past_compl:focus {
-    background-color: steelblue;
+    background-color: rgb(231, 231, 231);
 }
 
 .number_of_count {
@@ -360,7 +424,7 @@ body {
 .collapsed_today:after {
     display:block;
     content: '';
-    border-bottom: solid 2px steelblue;  
+    border-bottom: solid 1px rgb(0, 123, 214);  
     transform: scaleX(0);  
     transition: transform 350ms ease;
     transform-origin:100% 50%
@@ -387,7 +451,7 @@ body {
 .collapsed_tomorrow1:after {
     display:block;
     content: '';
-    border-bottom: solid 2px steelblue;  
+    border-bottom:  solid 1px rgb(0, 123, 214);  
     transform: scaleX(0);  
     transition: transform 350ms ease;
     transform-origin:100% 50%
@@ -414,7 +478,7 @@ body {
 .collapsed_tomorrow2:after {
     display:block;
     content: '';
-    border-bottom: solid 2px steelblue;  
+    border-bottom: solid 1px rgb(0, 123, 214);  
     transform: scaleX(0);  
     transition: transform 350ms ease;
     transform-origin:100% 50%
@@ -441,7 +505,7 @@ body {
 .collapsed_tomorrow3:after {
     display:block;
     content: '';
-    border-bottom: solid 2px steelblue;  
+    border-bottom: solid 1px rgb(0, 123, 214);  
     transform: scaleX(0);  
     transition: transform 350ms ease;
     transform-origin:100% 50%
@@ -469,7 +533,7 @@ body {
 .collapsed_tomorrow4:after {
     display:block;
     content: '';
-    border-bottom: solid 2px steelblue;  
+    border-bottom: solid 1px rgb(0, 123, 214);  
     transform: scaleX(0);  
     transition: transform 350ms ease;
     transform-origin:100% 50%
@@ -496,7 +560,7 @@ body {
 .collapsed_tomorrow5:after {
     display:block;
     content: '';
-    border-bottom: solid 2px steelblue;  
+    border-bottom: solid 1px rgb(0, 123, 214);  
     transform: scaleX(0);  
     transition: transform 350ms ease;
     transform-origin:100% 50%
@@ -523,7 +587,7 @@ body {
 .collapsed_tomorrow6:after {
     display:block;
     content: '';
-    border-bottom: solid 2px steelblue;  
+    border-bottom: solid 1px rgb(0, 123, 214);  
     transform: scaleX(0);  
     transition: transform 350ms ease;
     transform-origin:100% 50%
@@ -550,7 +614,7 @@ body {
 .collapsed_future:after {
     display:block;
     content: '';
-    border-bottom: solid 2px steelblue;  
+    border-bottom: solid 1px rgb(0, 123, 214);  
     transform: scaleX(0);  
     transition: transform 350ms ease;
     transform-origin:100% 50%
@@ -577,7 +641,7 @@ body {
 .collapsed_past:after {
     display:block;
     content: '';
-    border-bottom: solid 2px steelblue;  
+    border-bottom: solid 1px rgb(0, 123, 214);  
     transform: scaleX(0);  
     transition: transform 350ms ease;
     transform-origin:100% 50%
@@ -604,7 +668,7 @@ body {
 .collapsed_past_compl:after {
     display:block;
     content: '';
-    border-bottom: solid 2px steelblue;  
+    border-bottom: solid 1px rgb(0, 123, 214);  
     transform: scaleX(0);  
     transition: transform 350ms ease;
     transform-origin:100% 50%
@@ -630,35 +694,44 @@ body {
     line-height: 30px;
 }
 
+.checkbox {
+    margin-left: 10px;
+    /* vertical-align: middle; */
+}
+
 .checked {
     color: red;
     text-decoration: line-through;
     margin-left: 10px;
-    margin-top: 5px;
-    vertical-align: middle;
+    margin-top: 2px;
+    /* vertical-align: middle; */
 
 }
 
+.no_items{
+    margin-left: 10px;
+}
+
 .unchecked {
-    color: blue;
+    color: #007bff;
     text-decoration: none;
     margin-left: 10px;
-    margin-top: 5px;
-    vertical-align: middle;
+    margin-top: 2px;
+    /* vertical-align: middle; */
 
 }
 
 .sidebar {
     width: 200px;
     height: 100%;
-    background-color:lightgrey;
-    padding-top: 150px;
+    /* background-color:lightgrey; */
+    padding-top: 100px;
     margin-top: -25px;
-    position: absolute;
+    position: fixed;
     z-index: 0;
 }
 
-.menu {
+.menu_backup {
     width: 200px;
     border-bottom: solid 2px;
     border-color: white;
@@ -671,16 +744,36 @@ body {
     transition: 0.5s;
 }
 
-.menu:hover,
-.menu:focus {
-color: lightgrey;
-font-size: 25px;
+.menubar {
+    color: white;
+    margin-bottom: 10px;
+    width: 200px;
+    border: solid;
+    border-width: 1px;
+    border-color: lightgray;
+    border-radius: 5px;
+    height: 50px;
+    margin-left: -40px;
+    display: inline-grid;
+    font-size: 20px;
+    text-align: center;
+    vertical-align: middle;
+    transition: 0.4s;
+    transition-timing-function: ease-in;
+}
+
+.menubar:hover,
+.menubar:focus {
+color: white;
+border-color: rgb(0, 123, 214);
+background-color: rgb(0, 123, 214);
+/* font-size: 25px; */
 cursor: pointer;
 
 }
 
 .welcome {
-    position: absolute;
+    position: fixed;
     text-align: center;
     width: 200px;
     font-size: 20px;
