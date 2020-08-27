@@ -5,7 +5,10 @@ from django.contrib.auth.models import User
 from celery.task import periodic_task
 from celery import Celery
 from django.core.mail import send_mail
+from django_celery_beat.models import CrontabSchedule, PeriodicTask
+from django.core.exceptions import ValidationError
 import datetime
+import json
 
 from .models import Todo
 
@@ -56,3 +59,47 @@ def daily_morning_reminder():
             msg,
             'my.todo.apl@gmail.com',
             [user.email])
+
+
+def custom_reminder(reminder_time, reminder_date, user, todo_pk, email, title, on_off):
+    reminder_hour = reminder_time[0:2]
+    reminder_minute = reminder_time[3:5]
+    reminder_month = reminder_date[5:7]
+    reminder_day = reminder_date[8:10]
+    if on_off == True:
+        try:
+            periodic_task = PeriodicTask.objects.get(name='Reminder'+'_'+str(user)+'_'+str(reminder_month)+'_'+str(reminder_day)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo_pk))
+            periodic_task.enabled = True
+            periodic_task.save()
+        except:
+            schedule, _ = CrontabSchedule.objects.get_or_create(
+                minute=int(reminder_minute),
+                hour=int(reminder_hour),
+                day_of_week='*',
+                day_of_month=int(reminder_day),
+                month_of_year=int(reminder_month),
+                timezone='Europe/Vilnius',
+                )
+            try: 
+                PeriodicTask.objects.create(
+                    crontab=schedule,
+                    name='Reminder'+'_'+str(user)+'_'+str(reminder_month)+'_'+str(reminder_day)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo_pk),
+                    task='todo_items.tasks.one_off_task_reminder',
+                    args=json.dumps([title, 'This is a reminder for your task!', email]),
+                    one_off=True,
+                    )
+            except ValidationError:
+                PeriodicTask.objects.get(
+                    crontab=schedule,
+                    name='Reminder'+'_'+str(user)+'_'+str(reminder_month)+'_'+str(reminder_day)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo_pk),
+                    task='todo_items.tasks.one_off_task_reminder',
+                    args=json.dumps([title, 'This is a reminder for your task!', email]),
+                    one_off=True,
+                    )
+    if on_off == False:
+        try:
+            periodic_task = PeriodicTask.objects.get(name='Reminder'+'_'+str(user)+'_'+str(reminder_month)+'_'+str(reminder_day)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo_pk))
+            periodic_task.enabled = False
+            periodic_task.save()
+        except:
+            pass
