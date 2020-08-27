@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django_celery_beat.models import CrontabSchedule, PeriodicTask
 from django.http import HttpResponseRedirect, HttpResponse
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -12,6 +11,7 @@ import json
 
 from .models import Todo, Todo_Group
 from .forms import RegisterForm, LoginForm, TodoForm, GroupForm
+from .tasks import custom_reminder
 
 
 @receiver(post_save, sender=User)
@@ -238,6 +238,7 @@ def seven_days(request):
 
 
 def updateTodo(request, pk):
+    user = request.user
     todo = Todo.objects.get(pk=pk)
 
     form = TodoForm(instance=todo)
@@ -249,87 +250,12 @@ def updateTodo(request, pk):
             form.save()
             title = form.cleaned_data['title']
             reminder_time = form.cleaned_data['reminder_time']
-            reminder_hour = reminder_time[0:2]
-            reminder_minute = reminder_time[3:5]
-            
             reminder_date = str(form.cleaned_data['reminder_date'])
-            reminder_month = reminder_date[5:7]
-            reminder_day = reminder_date[8:10]
-            if form.instance.daily_reminder == True:
-                try:
-                    periodic_task = PeriodicTask.objects.get(name='Reminder'+'_'+str(request.user)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk))
-                    periodic_task.enabled = True
-                    periodic_task.save()
-                except:
-                    schedule, _ = CrontabSchedule.objects.get_or_create(
-                        minute=int(reminder_minute),
-                        hour=int(reminder_hour),
-                        day_of_week='*',
-                        day_of_month='*',
-                        month_of_year='*',
-                        timezone='Europe/Vilnius',
-                        )
-                    try: 
-                        PeriodicTask.objects.create(
-                            crontab=schedule,
-                            name='Reminder'+'_'+str(request.user)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk),
-                            task='todo_items.tasks.one_off_task_reminder',
-                            args=json.dumps([title, 'This is a reminder for your task!', request.user.email]),
-                            one_off=True,
-                            )
-                    except ValidationError:
-                        PeriodicTask.objects.get(
-                            crontab=schedule,
-                            name='Reminder'+'_'+str(request.user)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk),
-                            task='todo_items.tasks.one_off_task_reminder',
-                            args=json.dumps([title, 'This is a reminder for your task!', request.user.email]),
-                            one_off=True,
-                            )
-            if form.instance.custom_reminder == False:
-                try:
-                    periodic_task = PeriodicTask.objects.get(name='Reminder'+'_'+str(request.user)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk))
-                    periodic_task.enabled = False
-                    periodic_task.save()
-                except:
-                    pass
-            
-            if form.instance.custom_reminder == True:
-                try:
-                    periodic_task = PeriodicTask.objects.get(name='Reminder'+'_'+str(request.user)+'_'+str(reminder_month)+'_'+str(reminder_day)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk))
-                    periodic_task.enabled = True
-                    periodic_task.save()
-                except:
-                    schedule, _ = CrontabSchedule.objects.get_or_create(
-                        minute=int(reminder_minute),
-                        hour=int(reminder_hour),
-                        day_of_week='*',
-                        day_of_month=int(reminder_day),
-                        month_of_year=int(reminder_month),
-                        timezone='Europe/Vilnius',
-                        )
-                    try: 
-                        PeriodicTask.objects.create(
-                            crontab=schedule,
-                            name='Reminder'+'_'+str(request.user)+'_'+str(reminder_month)+'_'+str(reminder_day)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk),
-                            task='todo_items.tasks.one_off_task_reminder',
-                            args=json.dumps([title, 'This is a reminder for your task!', request.user.email]),
-                            one_off=True,
-                            )
-                    except ValidationError:
-                        PeriodicTask.objects.get(
-                            crontab=schedule,
-                            name='Reminder'+'_'+str(request.user)+'_'+str(reminder_month)+'_'+str(reminder_day)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk),
-                            task='todo_items.tasks.one_off_task_reminder',
-                            args=json.dumps([title, 'This is a reminder for your task!', request.user.email]),
-                            one_off=True,
-                            )
-            if form.instance.daily_reminder == False:
-                try:
-                    periodic_task = PeriodicTask.objects.get(name='Reminder'+'_'+str(request.user)+'_'+str(reminder_month)+'_'+str(reminder_day)+'_'+str(reminder_hour)+':'+str(reminder_minute)+'_'+'id'+':'+str(todo.pk))
-                    periodic_task.enabled = False
-                    periodic_task.save()
-                except:
-                    pass
+            todo_pk = todo.pk
+            email = user.email
+            on_off = form.cleaned_data['custom_reminder']
+
+            custom_reminder(reminder_time, reminder_date, user, todo_pk, email, title, on_off)
             
             return HttpResponseRedirect("/")
 
