@@ -62,21 +62,21 @@
         {% block sidebar %}
         {% if user.is_authenticated %}
         <ul>
-            <li class="menu"><a href="/">Home</a></li>
-            <li class="menu"><a href="/login">Login</a></li>
-            <li class="menu"><a href="/register">Register</a></li>
-            <li class="menu"><a href="/logout">Logout</a></li>
+            <li class="menubar"><a href="/">HOME</a></li>
+            <li class="menubar"><a href="/login">LOGIN</a></li>
+            <li class="menubar"><a href="/register">REGISTER</a></li>
+            <li class="menubar"><a href="/logout">LOGOUT</a></li>
             <br><br><br>
-            <li class="menu"><a href="/today">Today</a></li>
-            <li class="menu"><a href="/seven_days">Next 7 days</a></li>
-            <li class="menu"><a href="/">All Tasks</a></li>
-            <li class="menu"><a href="/groups">Groups/Create</a></li>
+            <li class="menubar"><a href="/today">TODAY</a></li>
+            <li class="menubar"><a href="/seven_days">NEXT 7 DAYS</a></li>
+            <li class="menubar"><a href="/">ALL TASKS</a></li>
+            <li class="menubar"><a href="/groups">GROUPS</a></li>
         </ul>
         {% elif user.is_anonymous %}
         <ul>
-            <li class="menu"><a href="/">Home</a></li>
-            <li class="menu"><a href="/login">Login</a></li>
-            <li class="menu"><a href="/register">Register</a></li>
+            <li class="menubar"><a href="/">Home</a></li>
+            <li class="menubar"><a href="/login">Login</a></li>
+            <li class="menubar"><a href="/register">Register</a></li>
 
         </ul>
         {% endif %}

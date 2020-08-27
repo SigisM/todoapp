@@ -21,6 +21,8 @@ class Todo(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     daily_reminder = models.BooleanField(blank=True, default=False)
     reminder_time = models.TextField(blank=True)
+    custom_reminder = models.BooleanField(blank=True, default=False)
+    reminder_date = models.DateField(default=datetime.date.today)
     task_group = models.ForeignKey(Todo_Group, on_delete=models.SET_NULL, null=True, default='1')
 
 

@@ -16,11 +16,12 @@ class TodoForm(forms.ModelForm):
 
     class Meta:
         model = Todo
-        fields = ['title', 'created', 'completed', 'daily_reminder', 'reminder_time', 'task_group']
+        fields = ['title', 'created', 'completed', 'daily_reminder', 'reminder_time', 'task_group', 'reminder_date', "custom_reminder"]
         widgets = {
             'created': DateInput(attrs={'class' : 'date_group'}),
             'title': forms.TextInput(attrs={'size': '40', 'class' : 'title_group', 'placeholder':" e.g. Arrange report"}),
             'reminder_time': DateTimeInput(format="%H:%M"),
+            'reminder_date': DateInput,
             'task_group': forms.Select(attrs={'class' : 'task_group'})
         }
 
