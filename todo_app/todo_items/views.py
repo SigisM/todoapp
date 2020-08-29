@@ -10,7 +10,7 @@ from datetime import timedelta
 import datetime
 import json
 
-from .models import Todo, Todo_Group
+from .models import Todo, Todo_Group, CrontabSchedule
 from .forms import RegisterForm, LoginForm, TodoForm, GroupForm
 from .tasks import custom_reminder, delete_reminder
 
@@ -175,7 +175,7 @@ def index(request):
         
         form = TodoForm(request.POST)
         form.instance.author = request.user
-        print(form.errors)
+
         if form.is_valid():
             form.save()
         return redirect('/')
@@ -247,8 +247,8 @@ def seven_days(request):
 def updateTodo(request, pk):
     user = request.user
     todo = Todo.objects.get(pk=pk)
-
-    form = TodoForm(instance=todo)
+    reminders = CrontabSchedule.objects.filter(name__startswith = "id:"+str(todo.pk))
+    form = TodoForm(initial={'completed':todo.completed, 'created':todo.created, 'title': todo.title})
     form.fields['task_group'].queryset = Todo_Group.objects.filter(user=request.user)
 
     if request.method == 'POST':
@@ -268,10 +268,9 @@ def updateTodo(request, pk):
 
             else:
                 custom_reminder(reminder_time, reminder_date, user, task_id, email, title, on_off)
-            
             return HttpResponseRedirect("/")
 
-    context = {'form':form, 'todo':todo}
+    context = {'form':form, 'todo':todo, 'reminders':reminders}
 
     return render(request, 'update_todo_expand.html', context)
 
@@ -286,3 +285,13 @@ def deleteTodo(request, pk):
 
     context = {'item':item}
     return render(request, 'delete_todo.html', context)
+
+
+def del_reminder(request, pk, reminder):
+    reminders = CrontabSchedule.objects.filter(name__startswith = "id:"+str(pk), name=reminder)
+    if request.method == 'POST':
+        reminders.delete()
+        return redirect('/')
+
+    # context = {'item':item}
+    return render(request, 'delete_reminder.html')

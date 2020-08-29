@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django_celery_beat.models import PeriodicTask
 import datetime
+from django_celery_beat.models import CrontabSchedule, cronexp
 
 
 # Create your models here.
@@ -29,3 +30,14 @@ class Todo(models.Model):
 
     def __str__(self):
         return self.title
+
+class CrontabSchedule(CrontabSchedule):
+
+    name = models.CharField(max_length=200)
+
+    def __str__(self):
+            return '{3}-{2} on {1}:{0}'.format(
+                cronexp(self.minute), cronexp(self.hour),
+                cronexp(self.day_of_month), cronexp(self.month_of_year),
+                cronexp(self.day_of_week), str(self.timezone)
+            )
