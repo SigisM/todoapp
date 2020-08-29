@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
+from django_celery_beat.models import PeriodicTask
 import datetime
 
 
@@ -17,17 +18,14 @@ class Todo_Group(models.Model):
 class Todo(models.Model):
     title = models.CharField(max_length=200)
     completed = models.BooleanField(default=False)
-    created = models.DateField(default=datetime.date.today)
+    created = models.DateField(default=datetime.datetime.today())
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     daily_reminder = models.BooleanField(blank=True, default=False)
     reminder_time = models.TextField(blank=True)
     custom_reminder = models.BooleanField(blank=True, default=False)
-    reminder_date = models.DateField(default=datetime.date.today)
+    reminder_date = models.DateField(default=datetime.datetime.today(), blank=True)
     task_group = models.ForeignKey(Todo_Group, on_delete=models.SET_NULL, null=True, default='1')
 
 
     def __str__(self):
         return self.title
-    
-    # def __unicode__(self):
-        # return u"{}".format(self.task_group.group_name)
