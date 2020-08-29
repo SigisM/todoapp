@@ -3,7 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect, HttpResponse
-from django.db.models.signals import post_save
+from django_celery_beat.models import PeriodicTask
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from datetime import timedelta
 import datetime
@@ -11,7 +12,7 @@ import json
 
 from .models import Todo, Todo_Group
 from .forms import RegisterForm, LoginForm, TodoForm, GroupForm
-from .tasks import custom_reminder
+from .tasks import custom_reminder, delete_reminder
 
 
 @receiver(post_save, sender=User)
@@ -23,6 +24,12 @@ def create_default_group(sender, instance, **kwargs):
         Todo_Group.objects.create(group_name=group_name, user=instance)
 
 
+@receiver(post_delete, sender=Todo)
+def delete_reminder_on_task_delete(sender, instance, **kwargs):
+    task_id = instance.pk
+    delete_reminder.delay(task_id)
+
+
 def set_default_group(request):
     todos = Todo.objects.filter(author=request.user)
     category = Todo_Group.objects.get(user=request.user, group_name = "Uncategorised")
@@ -30,7 +37,6 @@ def set_default_group(request):
         if not todo.task_group:
             todo.task_group = category
             todo.save()
-
 
 
 def register(response):
@@ -169,6 +175,7 @@ def index(request):
         
         form = TodoForm(request.POST)
         form.instance.author = request.user
+        print(form.errors)
         if form.is_valid():
             form.save()
         return redirect('/')
@@ -248,14 +255,19 @@ def updateTodo(request, pk):
         form = TodoForm(request.POST, instance=todo)
         if form.is_valid():
             form.save()
+
             title = form.cleaned_data['title']
             reminder_time = form.cleaned_data['reminder_time']
             reminder_date = str(form.cleaned_data['reminder_date'])
-            todo_pk = todo.pk
+            task_id = todo.pk
             email = user.email
             on_off = form.cleaned_data['custom_reminder']
 
-            custom_reminder(reminder_time, reminder_date, user, todo_pk, email, title, on_off)
+            if form.cleaned_data['completed']:
+                delete_reminder.delay(task_id)
+
+            else:
+                custom_reminder(reminder_time, reminder_date, user, task_id, email, title, on_off)
             
             return HttpResponseRedirect("/")
 
