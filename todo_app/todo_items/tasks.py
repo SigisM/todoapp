@@ -5,12 +5,12 @@ from django.contrib.auth.models import User
 from celery.task import periodic_task
 from celery import Celery
 from django.core.mail import send_mail
-from django_celery_beat.models import CrontabSchedule, PeriodicTask
+from django_celery_beat.models import PeriodicTask
 from django.core.exceptions import ValidationError
 import datetime
 import json
 
-from .models import Todo
+from .models import Todo, CrontabSchedule
 
 app = Celery()
 
@@ -27,10 +27,10 @@ def one_off_task_reminder(subject, body, email):
 
 @shared_task
 def delete_reminder(task_id):
-    periodic_tasks = PeriodicTask.objects.all()
-    for tasks in periodic_tasks:
-        if tasks.name.startswith("id:"+str(task_id)):
-            tasks.delete()
+    crontabs = CrontabSchedule.objects.all()
+    for cron in crontabs:
+        if cron.name.startswith("id:"+str(task_id)):
+            cron.delete()
 
 
 @app.task
@@ -82,6 +82,7 @@ def custom_reminder(reminder_time, reminder_date, user, task_id, email, title, o
             day_of_month=int(reminder_day),
             month_of_year=int(reminder_month),
             timezone='Europe/Vilnius',
+            name='id'+':'+str(task_id)+'_'+'reminder'+'_'+str(user)+'_'+str(reminder_month)+'_'+str(reminder_day)+'_'+str(reminder_hour)+':'+str(reminder_minute)
             )
         try: 
             PeriodicTask.objects.create(

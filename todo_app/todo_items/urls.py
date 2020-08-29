@@ -12,5 +12,6 @@ urlpatterns = [
     path('register/', views.register, name='register_page'),
     path('update_todo_expand/<str:pk>/', views.updateTodo, name='update_todo'),
     path('delete_todo/<str:pk>/', views.deleteTodo, name='delete_todo'),
+    path('delete_reminder/<str:pk>/<str:reminder>', views.del_reminder, name="del_reminder"),
 ]
 
