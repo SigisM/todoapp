@@ -9,7 +9,7 @@ from datetime import timedelta
 import datetime
 import json
 
-from .models import Todo, CrontabSchedule
+from .models import Todo, CrontabSchedule, Settings
 
 app = Celery()
 
@@ -37,7 +37,7 @@ def delete_old_tasks():
     users = User.objects.all()
     for user in users:
         interval = Settings.objects.get(user=user)
-        todos = Todo.objects.filter(author=user, completed=True, created=(datetime.date.today() - datetime.timedelta(days=interval.interval)))
+        todos = Todo.objects.filter(author=user, completed=True, created__lt=(datetime.date.today() - datetime.timedelta(days=interval.interval)))
         if todos.exists():
             for todo in todos:
                 todo.delete()

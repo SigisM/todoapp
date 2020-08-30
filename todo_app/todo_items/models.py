@@ -21,7 +21,7 @@ class Todo_Group(models.Model):
 class Todo(models.Model):
     title = models.CharField(max_length=200)
     completed = models.BooleanField(default=False)
-    created = models.DateField(default=timezone.now().date())
+    created = models.DateField(default=timezone.localtime(timezone.now()).date())
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     daily_reminder = models.BooleanField(blank=True, default=False)
     reminder_time = models.TextField(blank=True)

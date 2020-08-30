@@ -167,7 +167,6 @@ def create_delete_list_group(request, **kwargs):
     return render(request, 'group_list.html', context)
 
 
-
 @login_required
 def index(request):
     setting = Settings.objects.get(user=request.user)
@@ -178,7 +177,7 @@ def index(request):
     todos_completed_before_list = []
 
     for todos in todos_completed_before:
-        days_left.append((todos.created-timezone.now().date()).days)
+        days_left.append((todos.created-timezone.localtime(timezone.now()).date()).days)
         todos_completed_before_list.append(todos)
         
     zipped_completed_tasks_list_for_deletion_with_days = zip(todos_completed_before_list, days_left)
