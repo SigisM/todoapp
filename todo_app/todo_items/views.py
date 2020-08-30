@@ -171,6 +171,8 @@ def create_delete_list_group(request, **kwargs):
 
 @login_required
 def index(request):
+    setting = Settings.objects.get(user=request.user)
+    task_delete_interval = setting.interval
     todos_today = Todo.objects.filter(created=datetime.datetime.today(), author=request.user)
     todos_completed_before = Todo.objects.filter(completed=True, created__lt=datetime.datetime.today(), author=request.user)
     todos_future = Todo.objects.filter(created__gt=datetime.datetime.today(), author=request.user)
@@ -192,6 +194,7 @@ def index(request):
             'todos_uncompleted_before':todos_uncompleted_before,
             'todos_today':todos_today,
             'form':form,
+            'task_delete_interval':task_delete_interval
             }
         
     return render(request, 'todo_items.html', context)
@@ -253,8 +256,7 @@ def seven_days(request):
 
 def user_settings(request):
     setting = Settings.objects.get(user=request.user)
-    print(setting)
-    form = SettingsForm()
+    form = SettingsForm(initial={'interval':setting.interval})
     if request.method == 'POST':
         form = SettingsForm(request.POST)
         if form.is_valid():
