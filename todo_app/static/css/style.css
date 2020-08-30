@@ -13,12 +13,12 @@ a {
 a:hover {
     margin-top: 8px;
     color: white;
-    text-decoration: none; */
+    text-decoration: none;
 }
 
 .task_group {
     height: 40px;
-    width: 235px;
+    width: 233px;
 }
 
 .group_name {
@@ -31,6 +31,7 @@ a:hover {
 
 .date_group {
     height: 40px;
+    width: 160px;
 }
 
 body {
@@ -164,7 +165,7 @@ body {
 }
 
 .todo {
-    /* display: inline-block; */
+    display: inline-block;
     position: absolute;
     width: 620px;
     height: auto;
