@@ -74,10 +74,11 @@
                 <span class="no_items">There's no items in this list</span>
             </div>
         {% endfor  %}
-
-
-        <label><h3 class="collapsed_past_compl">TASKS HISTORY</h3></label>
-        <span class="number_of_count">{{todos_completed_before|length}}</span>
+    <div class="collased_past_compl_container">
+        <div class="collapsed_past_compl">TASKS HISTORY</div>
+        <div class="collapsed_past_compl_warning">tasks will be stored here for 5 days</div>
+        <div class="number_of_count_compl">{{todos_completed_before|length}}</div>
+    </div>
         {% for todo in todos_completed_before %}
             <a href="{% url 'update_todo' todo.pk %}" target='myIframe'>
                 <div class="todo_rows_past_compl">
