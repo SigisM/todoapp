@@ -1,12 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect, HttpResponse
-from django_celery_beat.models import PeriodicTask
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
-from datetime import timedelta
+from datetime import datetime, timedelta, date
+from django.utils import timezone
 import datetime
 import json
 
@@ -28,7 +27,6 @@ def create_default_group(sender, instance, **kwargs):
         return False
     else:
         Settings.objects.create(interval=task_delete_interval, user=instance)
-        print('ELSAS')
     
 
 @receiver(post_delete, sender=Todo)
@@ -169,12 +167,21 @@ def create_delete_list_group(request, **kwargs):
     return render(request, 'group_list.html', context)
 
 
+
 @login_required
 def index(request):
     setting = Settings.objects.get(user=request.user)
     task_delete_interval = setting.interval
     todos_today = Todo.objects.filter(created=datetime.datetime.today(), author=request.user)
     todos_completed_before = Todo.objects.filter(completed=True, created__lt=datetime.datetime.today(), author=request.user)
+    days_left = []
+    todos_completed_before_list = []
+
+    for todos in todos_completed_before:
+        days_left.append((todos.created-timezone.now().date()).days)
+        todos_completed_before_list.append(todos)
+        
+    zipped_completed_tasks_list_for_deletion_with_days = zip(todos_completed_before_list, days_left)
     todos_future = Todo.objects.filter(created__gt=datetime.datetime.today(), author=request.user)
     todos_uncompleted_before = Todo.objects.filter(completed=False, created__lt=datetime.datetime.today(), author=request.user)
     form = TodoForm()
@@ -194,7 +201,8 @@ def index(request):
             'todos_uncompleted_before':todos_uncompleted_before,
             'todos_today':todos_today,
             'form':form,
-            'task_delete_interval':task_delete_interval
+            'task_delete_interval':task_delete_interval,
+            'zipped_completed_tasks_list_for_deletion_with_days':zipped_completed_tasks_list_for_deletion_with_days,
             }
         
     return render(request, 'todo_items.html', context)

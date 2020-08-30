@@ -1,8 +1,6 @@
 from celery import shared_task
 from celery.task import task
-from celery.utils.log import get_task_logger
 from django.contrib.auth.models import User
-from celery.task import periodic_task
 from celery import Celery
 from django.core.mail import send_mail
 from django_celery_beat.models import PeriodicTask
@@ -38,9 +36,8 @@ def delete_reminder(task_id):
 def delete_old_tasks():
     users = User.objects.all()
     for user in users:
-        # interval = Settings.objects.filter(user=user)
-        interval = 5
-        todos = Todo.objects.filter(author=user, completed=True, created=(datetime.date.today() - datetime.timedelta(days=interval)))
+        interval = Settings.objects.get(user=user)
+        todos = Todo.objects.filter(author=user, completed=True, created=(datetime.date.today() - datetime.timedelta(days=interval.interval)))
         if todos.exists():
             for todo in todos:
                 todo.delete()

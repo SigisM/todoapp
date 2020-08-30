@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django_celery_beat.models import PeriodicTask
 import datetime
+from django.utils import timezone
 from django_celery_beat.models import CrontabSchedule, cronexp
 from django.core.validators import MaxValueValidator, MinValueValidator 
 
@@ -20,7 +21,7 @@ class Todo_Group(models.Model):
 class Todo(models.Model):
     title = models.CharField(max_length=200)
     completed = models.BooleanField(default=False)
-    created = models.DateField(default=datetime.datetime.today())
+    created = models.DateField(default=timezone.now().date())
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     daily_reminder = models.BooleanField(blank=True, default=False)
     reminder_time = models.TextField(blank=True)

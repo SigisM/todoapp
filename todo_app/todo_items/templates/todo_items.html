@@ -14,6 +14,7 @@
         </form>
     </div>
 
+{% comment %} {% now "Y-m-d" as date_now %} {% endcomment %}
 
 <div class="todo">
         <label><h3 class="collapsed_today">TODAY'S TASKS</h3></label>
@@ -79,12 +80,12 @@
         <div class="collapsed_past_compl_warning">tasks will be stored here for {{task_delete_interval}} days</div>
         <div class="number_of_count_compl">{{todos_completed_before|length}}</div>
     </div>
-        {% for todo in todos_completed_before %}
+        {% for todo, days in zipped_completed_tasks_list_for_deletion_with_days %}
             <a href="{% url 'update_todo' todo.pk %}" target='myIframe'>
                 <div class="todo_rows_past_compl">
                     <input class="checkbox" type="checkbox" disabled name="checkbox_check"{% if todo.completed %} checked {% endif %}>
                     <label class="checked">{{todo}}</label>
-                    <span class="time">{{todo.created|date:"Y m d"}}</span>
+                    <label class="days_left">{{ task_delete_interval|add:days }} days left</label>
                 </div>
             </a>
             {% empty %}
