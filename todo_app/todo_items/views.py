@@ -293,5 +293,4 @@ def del_reminder(request, pk, reminder):
         reminders.delete()
         return redirect('/')
 
-    # context = {'item':item}
     return render(request, 'delete_reminder.html')

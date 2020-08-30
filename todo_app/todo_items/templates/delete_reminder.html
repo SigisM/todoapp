@@ -4,10 +4,10 @@
     integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 <link type="text/css" href="{% static 'css/style.css' %}" rel="stylesheet" >
 
+{% now "Y" as year %}
 
 <div class="delete_method">
     <div>Are you sure you want to delete reminder?</div><br \>
-    {% comment %} <div style="font-weight: bold;">{{item}}</div> {% endcomment %}
     <br \>
     <a class="cancel_button" href="{% url 'list_page' %}" target='_parent'>Cancel</a>
     <br \>

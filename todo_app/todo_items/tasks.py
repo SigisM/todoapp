@@ -7,6 +7,7 @@ from celery import Celery
 from django.core.mail import send_mail
 from django_celery_beat.models import PeriodicTask
 from django.core.exceptions import ValidationError
+from datetime import timedelta
 import datetime
 import json
 
@@ -32,6 +33,17 @@ def delete_reminder(task_id):
         if cron.name.startswith("id:"+str(task_id)):
             cron.delete()
 
+
+@app.task
+def delete_old_tasks():
+    users = User.objects.all()
+    for user in users:
+        # interval = Settings.objects.filter(user=user)
+        interval = 5
+        todos = Todo.objects.filter(author=user, completed=True, created=(datetime.date.today() - datetime.timedelta(days=interval)))
+        if todos.exists():
+            for todo in todos:
+                todo.delete()
 
 @app.task
 def daily_evening_reminder():

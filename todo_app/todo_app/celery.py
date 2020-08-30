@@ -25,6 +25,10 @@ app.conf.beat_schedule = {
         'task': 'todo_items.tasks.daily_evening_reminder',
         'schedule': crontab(minute=0, hour=16, day_of_week="*"),
     },
+    'delete_old_tasks': {
+        'task': 'todo_items.tasks.delete_old_tasks',
+        'schedule': crontab(minute=0, hour=0, day_of_week="*"),
+    },
 }
 
 @app.task(bind=True)
