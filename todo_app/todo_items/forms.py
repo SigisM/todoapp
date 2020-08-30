@@ -14,7 +14,6 @@ class DateTimeInput(forms.DateTimeInput):
 
 class TodoForm(forms.ModelForm):
 
-    # daily_reminder = forms.BooleanField()
 
     class Meta:
         model = Todo

@@ -9,11 +9,13 @@ a {
     text-decoration: none;
 
 }
+
 a:hover {
     margin-top: 8px;
     color: white;
-    text-decoration: none;
+    text-decoration: none; */
 }
+
 .task_group {
     height: 40px;
     width: 235px;
@@ -64,10 +66,12 @@ body {
 
 .cancel_button:hover {
     color: white;
+    margin-top: 0px;
     background-color: rgb(0, 123, 255);
     cursor: pointer;
     text-decoration: none;
 }
+
 
 .delete_method{
     width: 100%;
@@ -103,11 +107,34 @@ body {
     font-variant: small-caps;
 }
 
+
+.reminder_list {
+    margin: auto;
+    width: 96%;
+    max-height: 140px;
+    display: grid;
+}
+
+.reminder_set {
+    font-size: 18px;
+    text-align: center;
+    position: relative;
+    width: 90%;
+    margin: auto;
+    padding-top: 10px;
+    font-variant: small-caps;
+}
+
 .reminder_rows {
     vertical-align: middle;
+    
 }
 .reminder {
     font-size: 14px;
+    text-align: center;
+    position: relative;
+    width: 90%;
+    margin: auto;
 }
 
 .update {
@@ -768,6 +795,7 @@ body {
     text-align: center;
     transition: 0.5s;
 }
+
 
 .menubar {
     color: white;

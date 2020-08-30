@@ -11,32 +11,38 @@
     integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 <link type="text/css" href="{% static 'css/style.css' %}" rel="stylesheet" >
 
-{% now "Y" as date %}
+{% now "Y" as year %}
 
     <h4 style="text-align: center; font-weight: bold; font-variant: small-caps;">edit task</h4>
     <form method="POST" target='_top' action="">
+
         {% csrf_token %}
-        <div>{{form.title.label_tag}} {{form.title}}</div>
-        <div>{{form.created.label_tag}} {{form.created}}
-        {{form.completed.label_tag}} {{form.completed}}</div>
-        <div>{{form.task_group.label_tag}} {{form.task_group}}</div>
-        <label class="set_reminder" style="display: inline;"><i class="far fa-bell fa-2x" style=" margin-top: -35px; margin-right: 5px;" title="Add reminder(s)" aria-hidden="true"></i></label>
+        <div class="update_form">
+            {{form.title.label_tag}} {{form.title}}
+            {{form.created.label_tag}} {{form.created}}
+            {{form.completed.label_tag}} {{form.completed}}
+            {{form.task_group.label_tag}} {{form.task_group}}
+        </div>
+
+        <label class="set_reminder" style="display: inline;">
+            <i class="far fa-bell fa-2x" style=" margin-top: -35px; margin-right: 5px;" title="Add reminder(s)" aria-hidden="true"></i>
+        </label>
+
         <div class="reminder" style="display: none;">
+            <div class="reminder_set">set reminder</div>
             {{form.custom_reminder}} {{form.reminder_date}} {{form.reminder_time}}
         </div>
+        
         <div class="reminder_underscore">active reminders</div>
             <div class="reminder_list">
                 {% for reminder in reminders %}
                 <div class="reminder_rows">
-                    <label class="reminder_label">{{date}}-{{reminder}}</label>
-                    <a href="{% url 'update_todo' todo.pk %}"><i class="far fa-edit fa-sm" style=" margin-top: -5px;" title="Edit item";></i></a>
+                    <label class="reminder_label">{{year}}-{{reminder}}</label>
                     <a href="{% url 'del_reminder' todo.pk reminder.name %}"><i class="far fa-trash-alt fa-sm" style=" margin-top: -5px;" title="Delete item"></i></a>
                 </div>
                 {% endfor %}
             </div>
-        </div>
 
-    </div>
     <div class="save_item">
         <input class="btn btn-outline-primary" type="submit" value="Save item" target="" name="Update ToDo Item">
 
