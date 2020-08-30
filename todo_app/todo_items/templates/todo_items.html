@@ -76,7 +76,7 @@
         {% endfor  %}
     <div class="collased_past_compl_container">
         <div class="collapsed_past_compl">TASKS HISTORY</div>
-        <div class="collapsed_past_compl_warning">tasks will be stored here for 5 days</div>
+        <div class="collapsed_past_compl_warning">tasks will be stored here for {{task_delete_interval}} days</div>
         <div class="number_of_count_compl">{{todos_completed_before|length}}</div>
     </div>
         {% for todo in todos_completed_before %}
