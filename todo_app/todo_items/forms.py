@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from .models import *
 
 
+
 class DateInput(forms.DateInput):
     input_type = 'date'
 
@@ -13,7 +14,6 @@ class DateTimeInput(forms.DateTimeInput):
 
 
 class TodoForm(forms.ModelForm):
-
 
     class Meta:
         model = Todo
@@ -25,6 +25,7 @@ class TodoForm(forms.ModelForm):
             'reminder_date': DateInput,
             'task_group': forms.Select(attrs={'class' : 'task_group'})
         }
+
 
 class LoginForm(forms.Form):
 
@@ -43,12 +44,20 @@ class GroupForm(forms.ModelForm):
 
 class RegisterForm(UserCreationForm):
 
-    # email = forms.EmailField
-
     class Meta:
         model = User
         fields = ["username", "email", "password1", "password2"]
         widgets = {
             'username':forms.TextInput(attrs={'placeholder':"Your username"}),
             'email':forms.EmailInput(attrs={'placeholder':"Tasks reminders will be sent to this email"}),
+        }
+    
+
+class SettingsForm(forms.ModelForm):
+
+    class Meta:
+        model = Settings
+        fields = ['interval']
+        widgets = {
+            'interval':forms.NumberInput(attrs={'class' : 'settings_interval'})
         }

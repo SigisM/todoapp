@@ -71,6 +71,7 @@
             <li class="menubar"><a href="/seven_days">NEXT 7 DAYS</a></li>
             <li class="menubar"><a href="/">ALL TASKS</a></li>
             <li class="menubar"><a href="/groups">GROUPS</a></li>
+            <li class="menubar"><a href="/settings">SETTINGS</a></li>
         </ul>
         {% elif user.is_anonymous %}
         <ul>
@@ -100,6 +101,8 @@
         {% block group_list %}
         {% endblock %}
         {% block content %}
+        {% endblock %}
+        {% block user_settings %}
         {% endblock %}
     </div>
     <div class="update" style="display: none;">
