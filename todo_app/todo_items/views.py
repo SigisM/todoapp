@@ -10,19 +10,26 @@ from datetime import timedelta
 import datetime
 import json
 
-from .models import Todo, Todo_Group, CrontabSchedule
-from .forms import RegisterForm, LoginForm, TodoForm, GroupForm
+from .models import Todo, Todo_Group, CrontabSchedule, Settings
+from .forms import RegisterForm, LoginForm, TodoForm, GroupForm, SettingsForm
 from .tasks import custom_reminder, delete_reminder
 
 
 @receiver(post_save, sender=User)
 def create_default_group(sender, instance, **kwargs):
     group_name = "Uncategorised"
+    task_delete_interval = 5
     if Todo_Group.objects.filter(group_name=group_name, user=instance).exists():
         return False
     else:
         Todo_Group.objects.create(group_name=group_name, user=instance)
 
+    if Settings.objects.filter(interval=task_delete_interval, user=instance).exists():
+        return False
+    else:
+        Settings.objects.create(interval=task_delete_interval, user=instance)
+        print('ELSAS')
+    
 
 @receiver(post_delete, sender=Todo)
 def delete_reminder_on_task_delete(sender, instance, **kwargs):
@@ -242,6 +249,22 @@ def seven_days(request):
             }
         
     return render(request, '7days_items.html', context)
+
+
+def user_settings(request):
+    setting = Settings.objects.get(user=request.user)
+    print(setting)
+    form = SettingsForm()
+    if request.method == 'POST':
+        form = SettingsForm(request.POST)
+        if form.is_valid():
+            setting.interval = form.instance.interval
+            setting.save()
+
+        return HttpResponseRedirect(request.path)
+
+    context = {'form':form}
+    return render(request, 'settings.html', context)
 
 
 def updateTodo(request, pk):

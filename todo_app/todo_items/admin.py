@@ -6,3 +6,4 @@ from .models import *
 
 admin.site.register(Todo)
 admin.site.register(Todo_Group)
+admin.site.register(Settings)

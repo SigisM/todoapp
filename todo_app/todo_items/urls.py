@@ -10,6 +10,7 @@ urlpatterns = [
     path('today/', views.today, name='today_page'),
     path('seven_days/', views.seven_days, name='seven_days_page'),
     path('register/', views.register, name='register_page'),
+    path('settings/', views.user_settings, name='user_settings'),
     path('update_todo_expand/<str:pk>/', views.updateTodo, name='update_todo'),
     path('delete_todo/<str:pk>/', views.deleteTodo, name='delete_todo'),
     path('delete_reminder/<str:pk>/<str:reminder>', views.del_reminder, name="del_reminder"),

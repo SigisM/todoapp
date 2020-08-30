@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django_celery_beat.models import PeriodicTask
 import datetime
 from django_celery_beat.models import CrontabSchedule, cronexp
+from django.core.validators import MaxValueValidator, MinValueValidator 
 
 
 # Create your models here.
@@ -41,3 +42,10 @@ class CrontabSchedule(CrontabSchedule):
                 cronexp(self.day_of_month), cronexp(self.month_of_year),
                 cronexp(self.day_of_week), str(self.timezone)
             )
+
+class Settings(models.Model):
+    interval = models.IntegerField(validators=[MinValueValidator(1)])
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+
+    # def __str__(self):
+    #     return self.interval

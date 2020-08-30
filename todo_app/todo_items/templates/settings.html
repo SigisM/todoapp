@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+<link type="text/css" href="{% static 'css/style.css' %}" rel="stylesheet" >
+
+{% block user_settings %}
+<div class="todo_list">
+    <h4>USER SETTINGS</h4>
+    <form method="POST" action="">
+        {% csrf_token %}
+        <div class="settings">
+            <div>delete completed tasks after they due in: {{form.interval}} days</div>
+        </div>
+        <input class="btn btn-outline-primary" type="submit" value="Save">
+    </form>
+</div>
+{% endblock %}

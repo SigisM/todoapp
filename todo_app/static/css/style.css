@@ -4,6 +4,7 @@
 
 }
 
+
 a {
     margin-top: 8px;
     text-decoration: none;
@@ -19,6 +20,15 @@ a:hover {
 .task_group {
     height: 40px;
     width: 233px;
+}
+
+.settings {
+    font-size: 20px;
+    font-variant: small-caps;
+}
+
+.settings_interval {
+    width: 50px;
 }
 
 .group_name {
