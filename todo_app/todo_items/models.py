@@ -49,4 +49,4 @@ class Settings(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
 
-# User._meta.get_field('email')._unique = True
+User._meta.get_field('email')._unique = True
