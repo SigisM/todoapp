@@ -15,6 +15,26 @@ app = Celery()
 
 app.conf.timezone = 'Europe/Vilnius'
 
+
+@shared_task
+def send_welcome_word(user, email, password):
+    subject = (f"Welcome onboard {user}")
+    body = f"""Thank You for registering on Todo App, {user}! \n
+        No more missed or forgotten tasks for job, leisure, travel or anything!
+        You can now track your daily activities, organize in groups and get daily reminders.\n
+        Your login date is:
+        Username: {user}
+        Password: {password}\n
+        You will receive tasks reminders to this email address as well \n\n
+        Todo App Team
+    """
+    send_mail(subject,
+    body,
+    'my.todo.apl@gmail.com',
+    [email])
+    return None
+
+
 @shared_task
 def one_off_task_reminder(subject, body, email):
     send_mail(subject,

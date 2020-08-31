@@ -14,6 +14,20 @@ Login Here
 
 {% if user.is_anonymous %}
 
+{% if success_message %}
+<div class="register_list">
+	<div style="font-variant:small-caps; font-size:30px;">Thank You and welcome onboard!</div>
+	<br /><br />
+		<div style="font-variant:small-caps; font-size:22px;">This message means that you've successfully registered.</div>
+		<br />
+		 <div style="font-variant:small-caps; font-size:22px;">You will receive a confirmation email shortly with your login data.</div>
+		 <br />
+			<div style="font-variant:small-caps; font-size:22px;"><a href="/login">Login</a> and start using this app. We hope you like it! </div>
+			<br />
+			<div style="font-variant:small-caps; font-size:28px;">See ya!</div>
+	</div>
+{% endif %}
+
 
 {% load crispy_forms_tags %}
 

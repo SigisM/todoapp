@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from crispy_forms.helper import FormHelper
 from .models import *
 
 
@@ -43,6 +44,12 @@ class GroupForm(forms.ModelForm):
 
 
 class RegisterForm(UserCreationForm):
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_error_title = 'Form Errors'
+        self.helper.error_text_inline = True
 
     class Meta:
         model = User
