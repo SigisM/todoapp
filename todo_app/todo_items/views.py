@@ -11,7 +11,7 @@ import json
 
 from .models import Todo, Todo_Group, CrontabSchedule, Settings
 from .forms import RegisterForm, LoginForm, TodoForm, GroupForm, SettingsForm
-from .tasks import custom_reminder, delete_reminder
+from .tasks import custom_reminder, delete_reminder, send_welcome_word
 
 
 @receiver(post_save, sender=User)
@@ -49,7 +49,12 @@ def register(response):
         form = RegisterForm(response.POST)
         if form.is_valid():
             form.save()
-        return redirect("/")
+            user = form.cleaned_data['username']
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password1']
+            success_message = 1
+            send_welcome_word.delay(user, email, password)
+            return render(response, "registration/login.html", {"success_message":success_message})
     else:
         form = RegisterForm()
 

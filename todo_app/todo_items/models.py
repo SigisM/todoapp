@@ -48,5 +48,5 @@ class Settings(models.Model):
     interval = models.IntegerField(validators=[MinValueValidator(1)])
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
-    # def __str__(self):
-    #     return self.interval
+
+# User._meta.get_field('email')._unique = True

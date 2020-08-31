@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+<link type="text/css" href="{% static 'css/style.css' %}" rel="stylesheet" >
+
+{% block welcome %}
+<div class="todo_list">
+    <h4>Thank You and welcome onboard!</h4>
+    <br /><br />
+    <h6>This message means that you've successfully registered. You will receive a confirmation email shortly with your login data.
+        <a href="/login">Login</a> and start using this app. We hope you like it! See ya!
+</div>
+{% endblock %}
