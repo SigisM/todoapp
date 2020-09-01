@@ -21,12 +21,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '==(e5t&5%oc*e0s=%lgc5br^g3ger*j*ubv%!wa@wv5m_p%55q'
+import os
+SECRET_KEY = os.environ.setdefault('DJANGO_SECRET_KEY', "todoapp.settings.local")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -56,6 +57,11 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'todo_app.urls'
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+SECURE_REFERRER_POLICY = 'same-origin'
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = "/"
