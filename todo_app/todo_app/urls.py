@@ -16,6 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
+from . import views
+
+handler403 = views.permission_error
+handler404 = views.page_not_found
+handler500 = views.server_error
 
 
 urlpatterns = [

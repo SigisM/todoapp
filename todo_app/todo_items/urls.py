@@ -2,7 +2,8 @@ from django.urls import path
 from . import views
 from django.conf.urls import url
 from django.views.generic import TemplateView
-# from .views import PostListView
+# from django.conf.urls import (handler404, handler500)
+
 
 urlpatterns = [
     path('', views.index, name='list_page'),
@@ -15,4 +16,3 @@ urlpatterns = [
     path('delete_todo/<str:pk>/', views.deleteTodo, name='delete_todo'),
     path('delete_reminder/<str:pk>/<str:reminder>', views.del_reminder, name="del_reminder"),
 ]
-

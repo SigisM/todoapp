@@ -6,6 +6,7 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from datetime import datetime, timedelta, date
 from django.utils import timezone
+from django.template import RequestContext
 import datetime
 import json
 
@@ -285,7 +286,7 @@ def updateTodo(request, pk):
     user = request.user
     todo = Todo.objects.get(pk=pk)
     reminders = CrontabSchedule.objects.filter(name__startswith = "id:"+str(todo.pk))
-    form = TodoForm(initial={'completed':todo.completed, 'created':todo.created, 'title': todo.title})
+    form = TodoForm(initial={'completed':todo.completed, 'created':todo.created, 'title': todo.title, 'task_group':todo.task_group})
     form.fields['task_group'].queryset = Todo_Group.objects.filter(user=request.user)
 
     if request.method == 'POST':
