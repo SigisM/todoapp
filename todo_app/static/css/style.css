@@ -850,3 +850,31 @@ cursor: pointer;
     font-size: 20px;
     z-index: 1;
 }
+
+.outer_404 {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.inner_404_left {
+    width: 500px;
+    height: 300px;
+    font-size: 120px;
+    text-align: center;
+    display: inline-block;
+}
+
+.inner_404_text {
+    font-size: 30px;
+    font-variant: small-caps;
+}
+
+.inner_404_link {
+    font-size: 15px;
+    font-variant: small-caps;
+    padding-top: -50px;
+    text-decoration: none;
+}
