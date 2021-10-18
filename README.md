@@ -70,7 +70,7 @@ You should see two running containers with their STATUS: UP
 * Run server<br />
 `$ python manage.py runserver`
 
-* Add your EMAIL host/user/pass data to settings.py<br />
+* Add your EMAIL host/port/user/pass data to settings.py<br />
 e.g.<br />
 `EMAIL_HOST = 'smtp.gmail.com'`<br />
 `EMAIL_PORT = 587`<br />
