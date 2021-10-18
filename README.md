@@ -70,6 +70,13 @@ You should see two running containers with their STATUS: UP
 * Run server<br />
 `$ python manage.py runserver`
 
+* Add your EMAIL host/user/pass data to settings.py<br />
+e.g.
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'your@email.com'
+EMAIL_HOST_PASSWORD = 'password'
+
 * Hop on [Localhost:8000](http://127.0.0.1:8000/) and you are ready to go<br />
 
 
